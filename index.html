@@ -3,910 +3,715 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Voice Identity — SPS IEEE-RITB</title>
+<title>Voice Identity | SPS IEEE-RITB</title>
 
-<!-- Added Google Fonts for accurate rendering -->
+<!-- Fonts: Inter for readability, Space Grotesk for engineering headers -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
-    --ink: #F2EEE6;
-    --ink-dim: #A9A49B;
-    --bg: #0B0C10;
-    --bg-raised: rgba(21, 23, 27, 0.65); /* Made translucent for glass effect */
-    --clay: #C1592F;
-    --clay-dim: #7A3B21;
+    /* IEEE & SPS Brand Colors - Premium Tech Aesthetic */
+    --bg-base: #030a14; 
     --ieee-blue: #00629B;
-    --ieee-blue-light: #4FA8D8;
-    --signal: #8FE3C6;
-    --line: #26282C;
-    --line-glow: rgba(79, 168, 216, 0.2);
-    --font-display: 'Archivo Black', 'Arial Black', sans-serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-data: 'JetBrains Mono', 'Courier New', monospace;
+    --ieee-dark: #002855;
+    --ieee-cyan: #00B5E2;
+    --sps-green: #8CC63F;
+    
+    --text-primary: #FFFFFF;
+    --text-secondary: #A0B3C6;
+    
+    --card-bg: rgba(0, 35, 75, 0.4);
+    --card-border: rgba(0, 181, 226, 0.2);
+    --card-hover: rgba(0, 181, 226, 0.35);
+    
+    --font-main: 'Inter', sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  html { 
+    scroll-behavior: smooth; 
+    background-color: var(--bg-base); 
+    font-family: var(--font-main);
+    color: var(--text-primary);
   }
 
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-body);
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-    position: relative;
-    overflow-x: hidden;
+  body { overflow-x: hidden; position: relative; }
+
+  /* --- CLEAN ENGINEERING GRID & RADAR BACKGROUND --- */
+  .engineering-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image: 
+      linear-gradient(rgba(0, 181, 226, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 181, 226, 0.06) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center center;
+    mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
+    -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 85%);
+    animation: panGrid 40s linear infinite;
+  }
+  @keyframes panGrid { 0% { transform: translateY(0); } 100% { transform: translateY(50px); } }
+
+  .radar-sweep {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 150vw; height: 150vw; z-index: 0; pointer-events: none;
+    background: conic-gradient(from 0deg, transparent 70%, rgba(140, 198, 63, 0.04) 80%, rgba(0, 181, 226, 0.08) 100%);
+    animation: sweep 12s linear infinite;
+    mix-blend-mode: screen;
+  }
+  @keyframes sweep { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+  /* --- PROFESSIONAL BOOT SPLASH --- */
+  #splash-screen {
+    position: fixed; inset: 0; z-index: 99999;
+    background: var(--bg-base); display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
+  }
+  .loading-text {
+    font-family: var(--font-mono); font-size: 1.1rem; color: var(--ieee-cyan);
+    margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.15em;
+  }
+  .eq-loader { display: flex; gap: 6px; height: 40px; align-items: flex-end; }
+  .eq-bar {
+    width: 6px; background: var(--sps-green); border-radius: 4px;
+    animation: eq-bounce 0.5s infinite alternate cubic-bezier(0.6, 0.05, 0.15, 0.95);
+  }
+  .eq-bar:nth-child(1) { height: 40%; animation-delay: 0.0s; }
+  .eq-bar:nth-child(2) { height: 100%; animation-delay: 0.15s; }
+  .eq-bar:nth-child(3) { height: 60%; animation-delay: 0.3s; }
+  .eq-bar:nth-child(4) { height: 80%; animation-delay: 0.1s; }
+  .eq-bar:nth-child(5) { height: 50%; animation-delay: 0.25s; }
+  @keyframes eq-bounce { from { height: 15%; } to { height: 100%; } }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* --- TYPOGRAPHY --- */
+  h1, h2, h3 { font-family: var(--font-display); }
+  h1 { font-size: clamp(3rem, 9vw, 7.5rem); font-weight: 900; letter-spacing: -0.04em; line-height: 0.95; text-transform: uppercase; }
+  h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1rem; }
+  h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; line-height: 1.3;}
+  p { font-size: 1.05rem; line-height: 1.7; color: var(--text-secondary); }
+  
+  .mono { font-family: var(--font-mono); font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; }
+  .text-gradient-blue { background: linear-gradient(135deg, #00B5E2, #00629B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .text-gradient-green { background: linear-gradient(135deg, #8CC63F, #4caf50); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  
+  /* --- LAYOUT --- */
+  .container { max-width: 1250px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 10; }
+  .section { padding: 100px 0; } 
+
+  /* --- NAVIGATION WITH LOGO --- */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 16px 32px;
+    background: rgba(3, 10, 20, 0.85);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 181, 226, 0.15);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  
+  .nav-logo {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    cursor: pointer; transition: var(--transition);
+    font-family: var(--font-display); font-weight: 800; font-size: 1.25rem; letter-spacing: 0.05em;
+  }
+  .nav-logo:hover {
+    transform: scale(1.02);
+    text-shadow: 0 0 10px rgba(255,255,255,0.4);
   }
 
-  /* Animated dot-grid background */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: -50px;
-    background-image: radial-gradient(circle at 1px 1px, rgba(242,238,230,0.06) 1px, transparent 0);
-    background-size: 28px 28px;
-    animation: driftGrid 40s linear infinite;
-    pointer-events: none;
-    z-index: 0;
+  .nav-status { 
+    background: rgba(140, 198, 63, 0.1); border: 1px solid rgba(140, 198, 63, 0.3);
+    color: var(--sps-green); padding: 8px 18px; border-radius: 30px; 
+    display: flex; align-items: center; gap: 10px; font-weight: 700;
+    transition: var(--transition); letter-spacing: 0.1em;
+  }
+  .nav-status:hover { background: rgba(140, 198, 63, 0.2); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(140, 198, 63, 0.2); }
+  .live-dot { 
+    width: 8px; height: 8px; background: var(--sps-green); border-radius: 50%; 
+    box-shadow: 0 0 10px var(--sps-green); animation: dot-pulse 2s infinite;
+  }
+  @keyframes dot-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(140,198,63,0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(140,198,63,0); }
+    100% { box-shadow: 0 0 0 0 rgba(140,198,63,0); }
   }
 
-  /* Ambient glowing orbs in the background */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: 
-      radial-gradient(circle at 80% -10%, rgba(0, 98, 155, 0.15), transparent 40%),
-      radial-gradient(circle at 20% 110%, rgba(193, 89, 47, 0.1), transparent 40%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  @keyframes driftGrid {
-    0% { transform: translate(0,0); }
-    100% { transform: translate(-28px,-28px); }
-  }
-
-  a { color: var(--signal); transition: filter 0.2s; }
-  a:hover { filter: brightness(1.2); }
-
-  .wrap {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 28px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Icon Animations */
-  .icon-spin { animation: spin 8s linear infinite; transform-origin: center; }
-  .icon-pulse { animation: iconPulse 2.4s ease-in-out infinite; }
-  .icon-float { animation: floatY 3.6s ease-in-out infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes iconPulse { 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.55; transform:scale(1.12);} }
-  @keyframes floatY { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-6px);} }
-
-  /* ---------- TOP BAR ---------- */
-  .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 22px 0;
-    border-bottom: 1px solid var(--line);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: rgba(11, 12, 16, 0.85);
-  }
-
-  .ieee-badge { display: flex; align-items: center; gap: 12px; }
-
-  .ieee-mark {
-    width: 38px; height: 38px;
-    border: 1.5px solid var(--ieee-blue-light);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-data); font-size: 11px; font-weight: 700;
-    color: var(--ieee-blue-light);
-    flex-shrink: 0;
-    position: relative;
-    box-shadow: 0 0 10px rgba(79, 168, 216, 0.2);
-  }
-  .ieee-mark::after {
-    content: "";
-    position: absolute; inset: -6px;
-    border: 1px dashed var(--ieee-blue-light);
-    border-radius: 50%;
-    opacity: 0.4;
-    animation: spin 14s linear infinite;
-  }
-  .ieee-mark span { position: relative; z-index: 1; }
-
-  .ieee-badge-text {
-    font-family: var(--font-data);
-    font-size: 11.5px; line-height: 1.5;
-    color: var(--ink-dim);
-  }
-  .ieee-badge-text strong {
-    color: var(--ink); font-weight: 600; display: block; letter-spacing: 0.02em;
-  }
-
-  .topbar-status {
-    font-family: var(--font-data);
-    font-size: 11px;
-    color: var(--signal);
-    display: flex; align-items: center; gap: 8px;
-    background: rgba(143, 227, 198, 0.1);
-    padding: 6px 12px;
-    border-radius: 20px;
-    border: 1px solid rgba(143, 227, 198, 0.2);
-  }
-  .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--signal);
-    box-shadow: 0 0 8px var(--signal);
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse { 0%,100%{ opacity: 1; transform: scale(1); } 50%{ opacity: 0.4; transform: scale(0.8); } }
-
-  /* ---------- HERO ---------- */
+  /* --- HERO SECTION --- */
   .hero {
-    padding: 72px 0 56px;
-    border-bottom: 1px solid var(--line);
-    position: relative;
-    overflow: hidden;
+    height: 100vh; min-height: 750px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; position: relative;
+  }
+  
+  .hero::before {
+    content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 70vw; height: 70vw; background: radial-gradient(circle, rgba(0, 181, 226, 0.12) 0%, transparent 60%);
+    z-index: 1; pointer-events: none;
   }
 
-  .hero-orbit {
-    position: absolute;
-    top: -60px; right: -80px;
-    width: 280px; height: 280px;
-    opacity: 0.6;
-    pointer-events: none;
-    filter: drop-shadow(0 0 15px rgba(79, 168, 216, 0.1));
-  }
+  .hero-content { position: relative; z-index: 10; max-width: 950px; padding: 0 16px; margin-top: -5vh; }
+  .hero p { max-width: 650px; margin: 24px auto 40px; font-size: clamp(1.1rem, 2.5vw, 1.25rem); text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
 
-  .hero-eyebrow {
-    font-family: var(--font-data);
-    font-size: 13px;
-    color: var(--ink-dim);
-    letter-spacing: 0.04em;
-    margin-bottom: 28px;
-    display: flex; align-items: center; gap: 12px;
-    opacity: 0;
-    animation: fadeUp 0.7s ease forwards 0.05s;
+  .oscilloscope-container {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
   }
-  .hero-eyebrow::before {
-    content: ""; width: 24px; height: 2px; background: var(--clay); display: inline-block;
-    box-shadow: 0 0 8px var(--clay);
-  }
+  canvas { display: block; width: 100%; height: 100%; opacity: 0.85; }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero h1 {
-    font-family: var(--font-display);
-    font-size: clamp(56px, 12vw, 104px);
-    line-height: 0.9;
-    margin: 0 0 24px;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-  }
-  .hero h1 span {
-    display: block;
-    opacity: 0;
-    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-  .hero h1 span:first-child { animation-delay: 0.15s; }
-  .hero h1 span:last-child {
-    color: transparent;
-    -webkit-text-stroke: 1.5px var(--ieee-blue-light);
-    animation-delay: 0.3s;
-    text-shadow: 0 0 20px rgba(79, 168, 216, 0.2);
-  }
-
-  .hero-sub {
-    font-size: 19px;
-    color: var(--ink-dim);
-    max-width: 48ch;
-    margin: 0 0 40px;
-    opacity: 0;
-    animation: fadeUp 0.8s ease forwards 0.45s;
-  }
-
-  .waveform-wrap {
-    opacity: 0;
-    animation: fadeUp 0.8s ease forwards 0.6s;
-    background: rgba(21, 23, 27, 0.4);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 16px;
-    backdrop-filter: blur(5px);
-  }
-
-  .waveform {
-    width: 100%;
-    height: 84px;
-    display: block;
-    margin: 8px 0 12px;
-  }
-  .waveform path, .waveform polyline {
-    animation: waveMove 3.2s ease-in-out infinite;
-  }
-  @keyframes waveMove {
-    0%,100% { transform: scaleY(1); }
-    50% { transform: scaleY(0.7); }
-  }
-  .waveform-live {
-    animation: waveMove 3.2s ease-in-out infinite, waveGlow 3.2s ease-in-out infinite;
-    transform-origin: center;
-  }
-  @keyframes waveGlow {
-    0%,100% { filter: drop-shadow(0 0 2px var(--clay)); }
-    50% { filter: drop-shadow(0 0 10px var(--clay)); }
-  }
-
-  .waveform-label {
-    font-family: var(--font-data);
-    font-size: 11px;
-    color: var(--ink-dim);
-    display: flex; justify-content: space-between;
-    opacity: 0.8;
-  }
-  .waveform-label .live-num { color: var(--signal); text-shadow: 0 0 8px rgba(143, 227, 198, 0.4); }
-
-  .hero-meta {
-    display: flex; flex-wrap: wrap; gap: 14px 28px;
-    font-family: var(--font-data);
-    font-size: 13.5px;
-    color: var(--ink-dim);
-    opacity: 0;
-    margin-top: 40px;
-    animation: fadeUp 0.8s ease forwards 0.75s;
-  }
-  .hero-meta div { display: flex; align-items: center; gap: 8px; }
-  .hero-meta strong { color: var(--ink); font-weight: 500; }
-  .hero-meta svg { opacity: 0.9; filter: drop-shadow(0 0 4px rgba(79, 168, 216, 0.4)); }
-
-  .cta-row {
-    margin-top: 44px;
-    display: flex; gap: 16px; flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 0.8s ease forwards 0.9s;
-  }
-
+  /* --- BUTTONS --- */
+  .btn-group { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
   .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 16px 30px;
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 15px;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
+    padding: 18px 40px; border-radius: 12px; font-weight: 700; font-size: 1.05rem;
+    cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; justify-content: center; gap: 12px; 
+    font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.08em;
   }
-
-  .btn-primary {
-    background: var(--clay);
-    color: #fff;
-    box-shadow: 0 0 20px rgba(193,89,47,0.4);
+  
+  .btn-primary { 
+    background: var(--sps-green); color: #000; 
+    border: 2px solid var(--sps-green);
+    box-shadow: 0 0 25px rgba(140, 198, 63, 0.3), inset 0 0 10px rgba(255,255,255,0.4);
+    animation: cta-pulse 3s infinite alternate;
   }
-  .btn-primary::before {
-    content: '';
-    position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
+  @keyframes cta-pulse {
+    0% { box-shadow: 0 0 20px rgba(140, 198, 63, 0.3); }
+    100% { box-shadow: 0 0 40px rgba(140, 198, 63, 0.7), 0 0 15px rgba(255,255,255,0.5); }
   }
   .btn-primary:hover { 
-    background: #d5643a; 
-    transform: translateY(-2px); 
-    box-shadow: 0 6px 24px rgba(193,89,47,0.6); 
+    transform: translateY(-4px) scale(1.02); 
+    background: #fff; border-color: #fff;
+    box-shadow: 0 15px 40px rgba(255, 255, 255, 0.6); 
+    animation: none;
   }
-  .btn-primary:hover::before { left: 100%; }
-
-  .btn-ghost {
-    background: rgba(255,255,255,0.03);
-    color: var(--ink);
-    border: 1px solid var(--line);
-    backdrop-filter: blur(4px);
+  
+  .btn-secondary { 
+    background: rgba(0, 98, 155, 0.2); color: #fff; 
+    border: 2px solid rgba(0, 181, 226, 0.5); backdrop-filter: blur(8px); 
+    box-shadow: 0 0 15px rgba(0, 181, 226, 0.1);
   }
-  .btn-ghost:hover { 
-    border-color: var(--ieee-blue-light); 
-    color: var(--ieee-blue-light); 
-    transform: translateY(-2px); 
-    background: rgba(79, 168, 216, 0.05);
-    box-shadow: 0 4px 15px rgba(79, 168, 216, 0.1);
-  }
-  .btn svg { transition: transform 0.2s ease; }
-  .btn:hover svg { transform: translateX(4px); }
-
-  /* ---------- SCROLL REVEAL ---------- */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .reveal.in {
-    opacity: 1;
-    transform: translateY(0);
+  .btn-secondary:hover { 
+    background: rgba(0, 181, 226, 0.2); color: #fff; border-color: var(--ieee-cyan);
+    transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 30px rgba(0, 181, 226, 0.4); 
   }
 
-  /* ---------- SECTIONS ---------- */
-  section {
-    padding: 64px 0;
-    border-bottom: 1px solid var(--line);
+  /* --- TICKER MARQUEE --- */
+  .marquee-container {
+    position: relative; z-index: 10;
+    background: linear-gradient(90deg, rgba(0,40,85,0.8), rgba(0,98,155,0.9), rgba(0,40,85,0.8));
+    padding: 16px 0; overflow: hidden; display: flex; white-space: nowrap;
+    border-top: 1px solid rgba(0,181,226,0.4); border-bottom: 1px solid rgba(0,181,226,0.4);
+    backdrop-filter: blur(10px);
   }
+  .marquee-content {
+    display: inline-block; animation: marquee 35s linear infinite;
+    color: #fff; font-weight: 700; letter-spacing: 0.15em; font-family: var(--font-mono);
+  }
+  .marquee-content span { margin-right: 60px; }
+  @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-  .section-head {
-    display: flex; align-items: center; gap: 16px;
-    margin-bottom: 32px;
+  /* --- FEATURES GRID (WHAT TO EXPECT) --- */
+  .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px; }
+  .feature-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    padding: 50px 32px; border-radius: 20px; text-align: center;
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    transition: var(--transition); position: relative; overflow: hidden;
+    cursor: pointer;
   }
-  .section-head .tag {
-    font-family: var(--font-data); font-size: 14px; color: var(--clay);
-    background: rgba(193,89,47,0.1); padding: 4px 8px; border-radius: 4px;
+  .feature-card::before {
+    content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top, rgba(0, 181, 226, 0.15), transparent 60%);
+    opacity: 0; transition: var(--transition);
   }
-  .section-head h2 {
-    font-family: var(--font-display);
-    font-size: 32px; margin: 0; letter-spacing: -0.01em;
-    flex: 1;
+  .feature-card:hover {
+    transform: translateY(-10px); border-color: var(--ieee-cyan); 
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 181, 226, 0.2);
   }
-  .section-head .icon-wrap {
-    width: 40px; height: 40px;
-    border: 1px solid var(--line);
-    background: rgba(255,255,255,0.02);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--ieee-blue-light);
-    transition: all 0.3s ease;
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon {
+    width: 80px; height: 80px; margin: 0 auto 24px; position: relative; z-index: 2;
+    background: linear-gradient(135deg, rgba(0, 181, 226, 0.1), rgba(0, 98, 155, 0.3));
+    border: 1px solid rgba(0, 181, 226, 0.3); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; color: var(--ieee-cyan);
+    box-shadow: inset 0 0 15px rgba(0, 181, 226, 0.2); transition: var(--transition);
   }
-  .section-head:hover .icon-wrap { 
-    border-color: var(--ieee-blue-light); 
-    transform: rotate(15deg) scale(1.1); 
-    box-shadow: 0 0 15px rgba(79, 168, 216, 0.2);
-    background: rgba(79, 168, 216, 0.05);
-  }
+  .feature-card:hover .feature-icon { transform: scale(1.1); background: rgba(0, 181, 226, 0.2); }
+  .feature-card h3, .feature-card p { position: relative; z-index: 2; }
 
-  p { color: var(--ink-dim); max-width: 62ch; font-size: 16px; }
-  p.lede { color: var(--ink); font-size: 18px; line-height: 1.6; }
+  /* --- BENTO GRID (ROUNDS & DETAILS) --- */
+  .bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; margin-top: 40px; }
+  .bento-box {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 24px; padding: 48px; position: relative; overflow: hidden;
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transition: var(--transition);
+  }
+  .bento-box:hover { transform: translateY(-5px); border-color: rgba(140, 198, 63, 0.4); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+  
+  .box-half { grid-column: span 6; }
+  .box-full { grid-column: span 12; display: flex; align-items: center; justify-content: space-between; gap: 40px;}
 
-  /* overview stat strip */
-  .stat-strip {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 1px; background: var(--line);
-    margin-top: 40px; border: 1px solid var(--line);
-    border-radius: 6px; overflow: hidden;
+  /* Tags */
+  .tag { 
+    display: inline-block; padding: 8px 16px; border-radius: 30px;
+    background: rgba(0, 181, 226, 0.15); color: var(--ieee-cyan);
+    border: 1px solid rgba(0, 181, 226, 0.4); margin-bottom: 24px; font-weight: 700;
   }
-  .stat {
-    background: var(--bg); padding: 24px 20px;
-    transition: background 0.3s ease;
-  }
-  .stat:hover { background: var(--bg-raised); }
-  .stat .n {
-    font-family: var(--font-data); font-size: 26px; color: var(--signal);
-    display: block; margin-bottom: 8px; font-weight: 700;
-    text-shadow: 0 0 10px rgba(143, 227, 198, 0.3);
-  }
-  .stat .l { font-size: 13px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.05em;}
+  .tag.green { background: rgba(140, 198, 63, 0.15); color: var(--sps-green); border-color: rgba(140, 198, 63, 0.4); }
 
-  /* spectrogram strip */
-  .spectrogram {
-    margin-top: 40px;
-    border: 1px solid var(--line);
-    background: var(--bg-raised);
-    backdrop-filter: blur(8px);
-    border-radius: 6px;
-    padding: 20px;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  /* Contact Cards (Clickable for Phones) */
+  .contact-list { margin-top: 24px; display: flex; flex-direction: column; gap: 16px; }
+  .contact-card {
+    padding: 20px; background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.05); border-radius: 16px;
+    display: flex; align-items: center; gap: 20px; transition: var(--transition); cursor: pointer; text-decoration: none;
   }
-  .spectrogram-label {
-    font-family: var(--font-data); font-size: 11px; color: var(--ink-dim);
-    margin-bottom: 16px; display: flex; justify-content: space-between;
-  }
-  .spectrogram-label .rec-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--clay); display: inline-block; margin-right: 8px;
-    animation: pulse 1.4s ease-in-out infinite;
-    box-shadow: 0 0 8px var(--clay);
-  }
-  .spectrogram-bars {
-    display: flex; align-items: flex-end; gap: 4px; height: 64px;
-  }
-  .spectrogram-bars div {
-    flex: 1;
-    background: linear-gradient(to top, var(--ieee-blue) 0%, var(--signal) 100%);
-    opacity: 0.85;
-    border-radius: 2px 2px 0 0;
-    transition: height 0.2s ease-out; /* Snappier transition for realism */
-    box-shadow: 0 0 8px rgba(143, 227, 198, 0.3);
-  }
+  .contact-card:hover { border-color: var(--ieee-cyan); transform: translateX(10px); background: rgba(0, 181, 226, 0.1); }
 
-  /* rounds */
-  .round {
-    display: grid; grid-template-columns: 64px 1fr; gap: 24px;
-    padding: 32px 0; border-top: 1px solid var(--line);
-    transition: transform 0.3s ease, padding-left 0.3s ease;
-  }
-  .round:first-of-type { border-top: none; }
-  .round:hover { padding-left: 12px; }
-
-  .round-icon {
-    width: 52px; height: 52px;
-    border: 1px solid var(--line);
-    background: rgba(255,255,255,0.02);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--clay);
-    transition: all 0.3s ease;
-  }
-  .round:hover .round-icon { 
-    border-color: var(--clay); 
-    transform: scale(1.1) rotate(-8deg); 
-    background: rgba(193,89,47,0.1);
-    box-shadow: 0 0 15px rgba(193,89,47,0.2);
-  }
-
-  .round h3 {
-    font-family: var(--font-body); font-weight: 700; font-size: 22px; margin: 0 0 10px;
-  }
-  .round .detail-line {
-    font-family: var(--font-data); font-size: 13px; color: var(--ink-dim);
-    margin-top: 16px; display: flex; gap: 24px; flex-wrap: wrap;
-    background: rgba(255,255,255,0.03); padding: 12px 16px; border-radius: 4px;
-  }
-  .round .detail-line span strong { color: var(--ink); font-weight: 600; }
-
-  /* logistics two-col */
-  .logistics-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 16px;
-  }
-  .logistics-grid > div {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 24px;
-    transition: transform 0.3s ease, border-color 0.3s;
-  }
-  .logistics-grid > div:hover {
-    transform: translateY(-4px);
-    border-color: var(--line-glow);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  }
-  .logistics-grid h4 {
-    font-family: var(--font-data); font-size: 14px; color: var(--ink-dim);
-    margin: 0 0 16px; font-weight: 500;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .logistics-grid ul { list-style: none; padding: 0; margin: 0; }
-  .logistics-grid li {
-    padding: 10px 0; border-top: 1px solid var(--line);
-    font-size: 15px; color: var(--ink);
-    display: flex; align-items: center; gap: 12px;
-    transition: transform 0.2s ease, color 0.2s ease;
-  }
-  .logistics-grid li:hover { transform: translateX(6px); color: var(--signal); }
-  .logistics-grid li:first-child { border-top: none; }
-  .logistics-grid li .li-dot {
-    width: 6px; height: 6px; border-radius: 50%; background: var(--ieee-blue-light);
-    flex-shrink: 0; box-shadow: 0 0 6px var(--ieee-blue-light);
-  }
-
-  /* prizes */
+  /* Prize Display */
+  .prize-container { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
   .prize-row {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 20px 16px; border-top: 1px solid var(--line);
-    transition: all 0.2s ease;
-    border-radius: 4px;
+    padding: 24px; background: rgba(0,0,0,0.3);
+    border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);
+    border-left: 6px solid var(--ieee-blue); transition: var(--transition); cursor: pointer;
   }
-  .prize-row:first-child { border-top: none; }
-  .prize-row:hover { background: rgba(255,255,255,0.03); transform: scale(1.01); }
-  .prize-place {
-    font-family: var(--font-data); font-size: 14px; color: var(--ink-dim); width: 100px;
-    display: flex; align-items: center; gap: 10px; font-weight: 600;
-  }
-  .prize-row.gold .prize-place { color: var(--clay); }
-  .prize-row.gold .prize-place svg { animation: iconPulse 2s ease-in-out infinite; filter: drop-shadow(0 0 4px var(--clay));}
-  .prize-name { font-size: 17px; flex: 1; font-weight: 500;}
-  .prize-value { font-family: var(--font-data); color: var(--signal); font-size: 15px; font-weight: 700; text-shadow: 0 0 8px rgba(143,227,198,0.3);}
+  .prize-row:hover { transform: scale(1.02); background: rgba(0,0,0,0.5); border-left-color: var(--ieee-cyan);}
+  .prize-row .val { font-size: 1.6rem; font-weight: 900; font-family: var(--font-display); }
+  .prize-1st { border-left-color: var(--sps-green); background: linear-gradient(90deg, rgba(140, 198, 63, 0.15), rgba(0,0,0,0.3)); }
+  .prize-1st:hover { border-left-color: var(--sps-green); }
+  .prize-1st h4, .prize-1st .val { color: var(--sps-green); text-shadow: 0 0 10px rgba(140, 198, 63, 0.4); }
 
-  /* coordinators / info */
-  .info-card {
-    background: var(--bg-raised);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--line);
-    border-left: 3px solid var(--ieee-blue);
-    border-radius: 6px;
-    padding: 24px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    transition: all 0.3s ease;
+  /* --- MOBILE OPTIMIZATION --- */
+  @media (max-width: 992px) {
+    .feature-grid { grid-template-columns: repeat(1, 1fr); gap: 16px; }
+    .box-half { grid-column: span 12; }
+    .box-full { flex-direction: column; align-items: flex-start; text-align: center; }
+    .bento-box { padding: 32px; }
   }
-  .info-card:hover { 
-    border-left-color: var(--signal); 
-    transform: translateX(6px); 
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-    background: rgba(25, 28, 33, 0.8);
+  
+  @media (max-width: 768px) {
+    nav { padding: 12px 16px; }
+    .nav-logo { font-size: 1rem; gap: 8px; }
+    .nav-logo svg { width: 22px; height: 22px; }
+    .nav-status { font-size: 0.75rem; padding: 6px 12px; gap: 6px; }
+    
+    .hero { min-height: 600px; padding-top: 80px; }
+    h1 { font-size: 3rem; }
+    h2 { font-size: 2.2rem; }
+    
+    .btn-group { flex-direction: column; width: 100%; gap: 12px; }
+    .btn { width: 100%; padding: 16px 24px; font-size: 1rem; }
+    
+    .section { padding: 60px 0; }
+    .bento-grid { gap: 16px; }
+    .bento-box { padding: 24px; border-radius: 16px; }
+    
+    .prize-row { padding: 16px; }
+    .prize-row .val { font-size: 1.25rem; }
   }
-  .info-avatar {
-    width: 48px; height: 48px;
-    border-radius: 50%;
-    border: 1.5px solid var(--ieee-blue-light);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--ieee-blue-light);
-    flex-shrink: 0;
-    background: rgba(79, 168, 216, 0.05);
-  }
-  .info-card .role {
-    font-family: var(--font-data); font-size: 12px; color: var(--ieee-blue-light); margin-bottom: 6px; letter-spacing: 0.05em; text-transform: uppercase;
-  }
-  .info-card .name { font-size: 19px; font-weight: 600; margin-bottom: 4px; }
-  .info-card .phone { font-family: var(--font-data); font-size: 14px; color: var(--ink-dim); }
-  .info-card .phone a { color: var(--ink-dim); text-decoration: none; display: flex; align-items: center; gap: 8px; }
-  .info-card .phone a:hover { color: var(--signal); }
 
-  .venue-box {
-    margin-top: 32px;
-    font-family: var(--font-data);
-    font-size: 14px;
-    color: var(--ink-dim);
-    line-height: 2.2;
-    border-top: 1px solid var(--line);
-    padding-top: 24px;
-    background: rgba(255,255,255,0.02);
-    padding: 20px;
-    border-radius: 6px;
-  }
-  .venue-box strong { color: var(--ink); font-weight: 600; }
-
-  /* footer */
-  footer { padding: 48px 0 72px; text-align: left; border-top: 1px solid var(--line); margin-top: 40px; }
-  footer p { font-size: 14px; color: var(--ink-dim); margin-bottom: 12px;}
-  footer .footer-mark {
-    font-family: var(--font-data); font-size: 12px; color: var(--ieee-blue-light); margin-top: 8px;
-    display: flex; align-items: center; gap: 10px; font-weight: 500;
-  }
-  footer .footer-mark svg { animation: spin 10s linear infinite; }
-
-  @media (max-width: 560px) {
-    .stat-strip { grid-template-columns: repeat(2, 1fr); }
-    .logistics-grid { grid-template-columns: 1fr; }
-    .round { grid-template-columns: 48px 1fr; gap: 16px; }
-    .hero-orbit { display: none; }
-    .hero h1 { font-size: 48px; }
-  }
+  /* --- SCROLL ANIMATIONS --- */
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal.active { opacity: 1; transform: translateY(0); }
+  .delay-1 { transition-delay: 0.1s; }
+  .delay-2 { transition-delay: 0.2s; }
+  .delay-3 { transition-delay: 0.3s; }
 </style>
 </head>
 <body>
 
-<div class="wrap">
+<!-- BACKGROUNDS -->
+<div class="radar-sweep"></div>
+<div class="engineering-grid"></div>
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="ieee-badge">
-      <div class="ieee-mark"><span>SPS</span></div>
-      <div class="ieee-badge-text">
-        <strong>IEEE Signal Processing Society</strong>
-        RITB Student Branch Chapter · MSRIT
-      </div>
-    </div>
-    <div class="topbar-status"><span class="dot"></span>REG OPEN</div>
+<!-- PROFESSIONAL BOOT SPLASH -->
+<div id="splash-screen">
+  <div class="loading-text" id="loading-txt">Initializing Audio Engine...</div>
+  <div class="eq-loader">
+    <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+    <div class="eq-bar"></div><div class="eq-bar"></div>
   </div>
-
-  <!-- HERO -->
-  <header class="hero">
-
-    <svg class="hero-orbit" viewBox="0 0 260 260" fill="none">
-      <circle cx="130" cy="130" r="90" stroke="#26282C" stroke-width="1.5"/>
-      <circle cx="130" cy="130" r="60" stroke="#26282C" stroke-width="1.5"/>
-      <g class="icon-spin" style="transform-origin:130px 130px;">
-        <circle cx="130" cy="40" r="4" fill="#4FA8D8"/>
-      </g>
-      <g style="animation: spin 20s linear infinite reverse; transform-origin:130px 130px;">
-        <circle cx="220" cy="130" r="3" fill="#C1592F"/>
-      </g>
-      <g style="animation: spin 26s linear infinite; transform-origin:130px 130px;">
-        <circle cx="130" cy="70" r="2.5" fill="#8FE3C6"/>
-      </g>
-    </svg>
-
-    <div class="hero-eyebrow">SPS IEEE-RITB &nbsp;·&nbsp; SIGNAL PROCESSING SOCIETY STUDENT CHAPTER</div>
-    <h1><span>VOICE</span><span>IDENTITY</span></h1>
-    <p class="hero-sub">Can you tell a real voice from a synthetic one? An interactive DSP audio-identification challenge — record, scramble, and unmask your teammates' voices in real time.</p>
-
-    <div class="waveform-wrap">
-      <svg class="waveform waveform-live" viewBox="0 0 720 84" preserveAspectRatio="none" aria-hidden="true">
-        <polyline points="0,42 12,42 20,20 28,64 36,10 44,74 52,30 60,50 68,42 76,42 84,18 92,60 100,42 108,42 116,8 124,76 132,34 140,48 148,42 156,42 164,26 172,56 180,42 188,42 196,14 204,70 212,38 220,44 228,42 236,42 244,22 252,60 260,42 268,42 276,6 284,78 292,30 300,50 308,42 316,42 324,18 332,64 340,42 348,42 356,32 364,52 372,42 380,42 388,10 396,74 404,36 412,46 420,42 428,42 436,24 444,58 452,42 460,42 468,16 476,68 484,40 492,44 500,42 508,42 516,28 524,54 532,42 540,42 548,20 556,62 564,42 572,42 580,34 588,50 596,42 604,42 612,12 620,72 628,38 636,46 644,42 652,42 660,26 668,56 676,42 684,42 692,30 700,52 708,42 720,42"
-          fill="none" stroke="#C1592F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <div class="waveform-label"><span>CH.01 — RAW SIGNAL</span><span class="live-num">44.1 kHz</span></div>
-    </div>
-
-    <div class="hero-meta">
-      <div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4FA8D8" stroke-width="2"><path d="M12 21s-7-6.5-7-11.5A7 7 0 0 1 19 9.5C19 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
-        <strong>LHC SEMINAR HALL 2, MSRIT CAMPUS</strong>
-      </div>
-      <div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4FA8D8" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
-        <strong>22 SEP, 2026</strong>
-      </div>
-      <div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4FA8D8" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        <strong>2 HOURS</strong>
-      </div>
-      <div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4FA8D8" stroke-width="2"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6M14 14.5c2.6.2 4.5 2.3 4.5 5.5"/></svg>
-        <strong>TEAMS OF 3–4</strong>
-      </div>
-    </div>
-
-    <div class="cta-row">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSemM2HietPYBYwsJQp7tFEWxyWSIc4l14GK_ro2wN_9SBZfZg/viewform?usp=publish-editor" class="btn btn-primary">
-        Register your team
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a href="#rounds" class="btn btn-ghost">
-        See how it works
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
-      </a>
-    </div>
-  </header>
-
-  <!-- OVERVIEW -->
-  <section id="overview">
-    <div class="section-head reveal">
-      <span class="tag">01</span>
-      <h2>Overview</h2>
-      <div class="icon-wrap">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="5"/></svg>
-      </div>
-    </div>
-    <p class="lede reveal">An interactive audio challenge built around practical digital signal processing. Teams record short voice clips, which get scrambled, pitch-shifted, and format-altered live using signal-manipulation algorithms — then race to identify their own teammates' voices in a blind test.</p>
-
-    <div class="stat-strip reveal">
-      <div class="stat"><span class="n" data-count="3-4">0</span><span class="l">members per team</span></div>
-      <div class="stat"><span class="n" data-count="2h">0</span><span class="l">total duration</span></div>
-      <div class="stat"><span class="n" data-count="2">0</span><span class="l">competitive rounds</span></div>
-      <div class="stat"><span class="n" data-count="ALL">0</span><span class="l">branches & years</span></div>
-    </div>
-
-    <div class="spectrogram reveal">
-      <div class="spectrogram-label"><span><span class="rec-dot"></span>LIVE SPECTROGRAM PREVIEW</span><span>0–8 kHz</span></div>
-      <div class="spectrogram-bars" id="spectroBars"></div>
-    </div>
-  </section>
-
-  <!-- ROUNDS -->
-  <section id="rounds">
-    <div class="section-head reveal">
-      <span class="tag">02</span>
-      <h2>Rounds</h2>
-      <div class="icon-wrap">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
-      </div>
-    </div>
-
-    <div class="round reveal">
-      <div class="round-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4M9 22h6"/></svg>
-      </div>
-      <div>
-        <h3>The Scramble — Elimination</h3>
-        <p>Each member records a 5-second standardized phrase. Our Python system applies pitch scaling and formant shifting, then scrambles the playback order. Teams have to match each altered voice snippet back to the correct teammate.</p>
-        <div class="detail-line">
-          <span><strong>Format:</strong> Audio-based blind ID</span>
-          <span><strong>Scoring:</strong> Speed + accuracy</span>
-          <span><strong>Advance:</strong> Top 50%</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="round reveal">
-      <div class="round-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 17.5h7M17.5 14v7"/></svg>
-      </div>
-      <div>
-        <h3>The Deep-fake Duel — Finals</h3>
-        <p>Finalist teams receive a mix of genuine samples, heavily filtered voices, and fully synthesized clips. Teams analyse both the audio and live on-screen spectrograms to classify each one as real or modified.</p>
-        <div class="detail-line">
-          <span><strong>Format:</strong> DSP vs. AI voice discrimination</span>
-          <span><strong>Scoring:</strong> Highest cumulative score wins</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- LOGISTICS -->
-  <section id="logistics">
-    <div class="section-head reveal">
-      <span class="tag">03</span>
-      <h2>What's running it</h2>
-      <div class="icon-wrap">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M4 9h2M4 15h2M18 9h2M18 15h2M9 4v2M15 4v2M9 18v2M15 18v2"/></svg>
-      </div>
-    </div>
-    <div class="logistics-grid reveal">
-      <div>
-        <h4>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4FA8D8" stroke-width="2"><rect x="2" y="4" width="20" height="13" rx="1"/><path d="M8 21h8M12 17v4"/></svg>
-          Hardware on site
-        </h4>
-        <ul>
-          <li><span class="li-dot"></span>1 laptop running local Python DSP</li>
-          <li><span class="li-dot"></span>USB condenser / lapel microphone</li>
-          <li><span class="li-dot"></span>Sound system / PA speakers</li>
-          <li><span class="li-dot"></span>Projector & screen for live spectrograms</li>
-        </ul>
-      </div>
-      <div>
-        <h4>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4FA8D8" stroke-width="2"><path d="M8 3 4 7v10l4 4M16 3l4 4v10l-4 4M9 8l6 8M15 8l-6 8"/></svg>
-          Software stack
-        </h4>
-        <ul>
-          <li><span class="li-dot"></span>Python 3.x</li>
-          <li><span class="li-dot"></span>librosa</li>
-          <li><span class="li-dot"></span>soundfile · scipy · numpy</li>
-          <li><span class="li-dot"></span>matplotlib</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRIZES -->
-  <section id="prizes">
-    <div class="section-head reveal">
-      <span class="tag">04</span>
-      <h2>Prizes</h2>
-      <div class="icon-wrap">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5"/></svg>
-      </div>
-    </div>
-    <div class="prize-row gold reveal">
-      <div class="prize-place">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.6 6.9L22 9.2l-5.4 4.8L18.2 22 12 17.8 5.8 22l1.6-8-5.4-4.8 7.4-.3L12 2z"/></svg>
-        1ST
-      </div>
-      <div class="prize-name">STM Boards</div>
-      <div class="prize-value">₹4,500</div>
-    </div>
-    <div class="prize-row reveal">
-      <div class="prize-place">2ND</div>
-      <div class="prize-name">Cash prize</div>
-      <div class="prize-value">₹1,500</div>
-    </div>
-    <div class="prize-row reveal">
-      <div class="prize-place">3RD</div>
-      <div class="prize-name">Cash prize</div>
-      <div class="prize-value">₹1,000</div>
-    </div>
-  </section>
-
-  <!-- INFORMATION -->
-  <section id="information">
-    <div class="section-head reveal">
-      <span class="tag">05</span>
-      <h2>Information</h2>
-      <div class="icon-wrap">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.1-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg>
-      </div>
-    </div>
-
-    <div class="info-card reveal">
-      <div class="info-avatar">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-      </div>
-      <div>
-        <div class="role">Coordinator</div>
-        <div class="name">Mayur</div>
-        <div class="phone">
-          <a href="tel:+919108261536">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.1-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg>
-            +91 91082 61536
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="info-card reveal">
-      <div class="info-avatar">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
-      </div>
-      <div>
-        <div class="role">Coordinator</div>
-        <div class="name">Sukanya Khot</div>
-        <div class="phone">
-          <a href="tel:+917349781259">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1.1-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg>
-            +91 73497 81259
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div class="venue-box reveal">
-      <strong>Venue:</strong> LHC Seminar Hall, LHC Block, MSRIT Campus<br>
-      <strong>Date:</strong> 22nd September, 2026<br>
-      <strong>Reporting time:</strong> 2:30 PM<br>
-      <strong>Registration deadline:</strong> 12th September
-    </div>
-
-    <div class="cta-row reveal" style="opacity:1; animation:none; margin-top: 32px;">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSemM2HietPYBYwsJQp7tFEWxyWSIc4l14GK_ro2wN_9SBZfZg/viewform?usp=publish-editor" class="btn btn-primary">
-        Fill registration form
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </div>
-  </section>
-
-  <footer>
-    <p>Organized by SPS IEEE-RITB — Signal Processing Society Student Branch Chapter, MSRIT.</p>
-    <div class="footer-mark">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M3 12h18"/></svg>
-      IEEE R10 · Bangalore Section
-    </div>
-  </footer>
-
 </div>
 
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo sound-trigger">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--sps-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
+    IEEE SPS MSRIT
+  </a>
+  <a href="https://forms.gle/2zP2oLRUFhLArtzUA" target="_blank" class="nav-status mono sound-trigger">
+    <div class="live-dot"></div> REGISTRATION OPEN
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <!-- Live Clean Oscilloscope Canvas -->
+  <div class="oscilloscope-container">
+    <canvas id="scopeCanvas"></canvas>
+  </div>
+
+  <div class="hero-content">
+    <div class="mono reveal active" style="color: var(--ieee-cyan); margin-bottom: 24px; font-weight: 700; background: rgba(0, 181, 226, 0.15); padding: 8px 20px; border-radius: 30px; border: 1px solid rgba(0, 181, 226, 0.3); display: inline-block; box-shadow: 0 0 20px rgba(0,181,226,0.2);">
+      PRACTICAL DSP EVENT SERIES
+    </div>
+    
+    <h1 class="reveal active delay-1">VOICE <br><span class="text-gradient-green">IDENTITY</span></h1>
+    
+    <p class="reveal active delay-2">Step into the signal lab. Record your voice, watch our Python algorithms scramble the frequency, and test your team's ability to decode the real audio from the synthetic noise.</p>
+    
+    <div class="btn-group reveal active delay-3">
+      <!-- REGISTRATION BUTTON -->
+      <a href="https://forms.gle/2zP2oLRUFhLArtzUA" target="_blank" class="btn btn-primary sound-trigger-heavy">
+        Register Your Team
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#event-details" class="btn btn-secondary sound-trigger">
+        View Intel
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DYNAMIC TICKER -->
+<div class="marquee-container">
+  <div class="marquee-content mono">
+    <span>/// IEEE R10 BANGALORE SECTION</span>
+    <span>/// REAL-TIME SPECTROGRAM ANALYSIS</span>
+    <span>/// DSP VS AI DISCRIMINATION</span>
+    <span>/// OPEN TO ALL ENGINEERING BRANCHES</span>
+    <span>/// HARDWARE & CASH PRIZES ///</span>
+    <span>/// IEEE R10 BANGALORE SECTION</span>
+    <span>/// REAL-TIME SPECTROGRAM ANALYSIS</span>
+    <span>/// DSP VS AI DISCRIMINATION</span>
+    <span>/// OPEN TO ALL ENGINEERING BRANCHES</span>
+    <span>/// HARDWARE & CASH PRIZES ///</span>
+  </div>
+</div>
+
+<!-- WHAT TO EXPECT -->
+<section id="event-details" class="section container">
+  <div style="text-align: center; max-width: 750px; margin: 0 auto; margin-bottom: 20px;">
+    <h2 class="reveal">What to Expect</h2>
+    <p class="reveal delay-1">Experience hands-on signal manipulation. This isn't a lecture—it's an interactive challenge testing your ears and analytical skills under pressure.</p>
+  </div>
+  
+  <div class="feature-grid">
+    <div class="feature-card reveal sound-trigger">
+      <div class="feature-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+      </div>
+      <h3>Live Recording</h3>
+      <p style="margin-top: 12px;">Teams record baseline audio samples right on the spot using our high-fidelity condenser setup.</p>
+    </div>
+    
+    <div class="feature-card reveal delay-1 sound-trigger">
+      <div class="feature-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h3>DSP Manipulation</h3>
+      <p style="margin-top: 12px;">Our algorithms apply pitch-scaling, format shifting, and permutations to scramble the identity.</p>
+    </div>
+    
+    <div class="feature-card reveal delay-2 sound-trigger">
+      <div class="feature-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
+      </div>
+      <h3>Spectral Analysis</h3>
+      <p style="margin-top: 12px;">Read live visual spectrograms to identify hidden synthetic anomalies masking the true audio.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EVENT ROUNDS -->
+<section class="section container" style="padding-top: 0;">
+  <h2 class="reveal" style="text-align: center; margin-bottom: 50px;">Event Rounds</h2>
+  
+  <div class="bento-grid">
+    <!-- Round 1 -->
+    <div class="bento-box box-half reveal sound-trigger">
+      <div class="tag mono">ROUND 01</div>
+      <h3 style="font-size: 2.2rem; margin-bottom: 16px;">The Scramble</h3>
+      <p style="margin-bottom: 24px;">A pure test of auditory memory. The system scrambles your teammate's playback array and heavily distorts the frequency. Teams compete in a fast-paced blind test to correctly identify who is speaking under the distortion.</p>
+      <div style="background: rgba(0,0,0,0.4); padding: 18px; border-radius: 12px; border-left: 4px solid var(--ieee-cyan);">
+        <span class="mono" style="color: var(--text-primary); font-weight: 700;">ELIMINATION:</span> <span style="color: var(--text-secondary);">Top 50% advance based on speed/accuracy.</span>
+      </div>
+    </div>
+    
+    <!-- Round 2 -->
+    <div class="bento-box box-half reveal delay-1 sound-trigger">
+      <div class="tag green mono">ROUND 02</div>
+      <h3 style="font-size: 2.2rem; margin-bottom: 16px;">The Deep-fake Duel</h3>
+      <p style="margin-bottom: 24px;">Finalists face a gauntlet: genuine human audio vs. completely synthetic/altered variations. Monitor live on-screen spectrogram readouts to spot visual anomalies and classify the audio.</p>
+      <div style="background: rgba(0,0,0,0.4); padding: 18px; border-radius: 12px; border-left: 4px solid var(--sps-green);">
+        <span class="mono" style="color: var(--text-primary); font-weight: 700;">FINALS:</span> <span style="color: var(--text-secondary);">Highest cumulative score across identification wins.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRATION & PRIZES -->
+<section id="register" class="section container" style="padding-top: 0;">
+  <div class="bento-grid">
+    
+    <!-- Coordinators with Dialing Links -->
+    <div class="bento-box box-half reveal">
+      <div class="tag mono">SUPPORT_LINK</div>
+      <h3 style="font-size: 2.2rem; margin-bottom: 12px;">Event Coordinators</h3>
+      <p>Have questions regarding team size or the technical setup? Reach out to our core operations team.</p>
+      <div class="contact-list">
+        <!-- Tap to dial Mayur -->
+        <a href="tel:+919108261536" class="contact-card sound-trigger">
+          <div style="background: rgba(0, 181, 226, 0.15); padding: 16px; border-radius: 50%; color: var(--ieee-cyan);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div>
+            <div style="color: #fff; font-weight: 700; font-size: 1.25rem;">Mayur</div>
+            <div class="mono" style="color: var(--ieee-cyan); margin-top: 6px;">+91 91082 61536</div>
+          </div>
+        </a>
+        <!-- Tap to dial Sukanya -->
+        <a href="tel:+917349781259" class="contact-card sound-trigger">
+          <div style="background: rgba(0, 181, 226, 0.15); padding: 16px; border-radius: 50%; color: var(--ieee-cyan);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div>
+            <div style="color: #fff; font-weight: 700; font-size: 1.25rem;">Sukanya</div>
+            <div class="mono" style="color: var(--ieee-cyan); margin-top: 6px;">+91 73497 81259</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Prizes -->
+    <div class="bento-box box-half reveal delay-1">
+      <div class="tag green mono">AWARDS</div>
+      <h3 style="font-size: 2.2rem; margin-bottom: 12px;">Hardware & Cash</h3>
+      <div class="prize-container">
+        <div class="prize-row prize-1st sound-trigger">
+          <div>
+            <h4 class="mono" style="margin-bottom: 6px;">1ST PLACE</h4>
+            <div style="font-size: 0.95rem; color: var(--text-secondary);">Hardware Reward</div>
+          </div>
+          <span class="val">STM Boards</span>
+        </div>
+        <div class="prize-row sound-trigger">
+          <div>
+            <h4 class="mono" style="color: var(--ieee-cyan); margin-bottom: 6px;">2ND PLACE</h4>
+            <div style="font-size: 0.95rem; color: var(--text-secondary);">Cash Prize</div>
+          </div>
+          <span class="val text-gradient-blue">₹1,500</span>
+        </div>
+        <div class="prize-row sound-trigger">
+          <div>
+            <h4 class="mono" style="color: var(--text-secondary); margin-bottom: 6px;">3RD PLACE</h4>
+            <div style="font-size: 0.95rem; color: var(--text-secondary);">Cash Prize</div>
+          </div>
+          <span class="val">₹1,000</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- CTA Banner -->
+    <div class="bento-box box-full reveal delay-2" style="background: linear-gradient(135deg, rgba(0, 98, 155, 0.7), rgba(140, 198, 63, 0.4)); border-color: var(--sps-green); box-shadow: 0 10px 40px rgba(140, 198, 63, 0.2);">
+      <div>
+        <h3 style="font-size: 2.4rem; margin-bottom: 12px; color: #fff;">Ready to test your ears?</h3>
+        <p style="color: rgba(255,255,255,0.9); max-width: 500px; font-size: 1.15rem;">Form a team of 3 to 4 members. Open to all engineering branches and years.</p>
+      </div>
+      <!-- REGISTRATION BUTTON -->
+      <a href="https://forms.gle/2zP2oLRUFhLArtzUA" target="_blank" class="btn btn-primary sound-trigger-heavy" style="padding: 22px 50px; font-size: 1.15rem; width: auto; flex-shrink: 0; width: 100%; max-width: 300px;">
+        Initialize Registration
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="section container" style="text-align: center; border-top: 1px solid rgba(0, 181, 226, 0.2); padding-top: 50px; margin-top: 20px; padding-bottom: 50px;">
+  <p class="mono" style="font-size: 0.9rem; color: var(--text-secondary); letter-spacing: 0.05em;">ORGANIZED BY SIGNAL PROCESSING SOCIETY MSRIT</p>
+  <p class="mono" style="font-size: 0.9rem; color: var(--ieee-cyan); margin-top: 10px; font-weight: 700; letter-spacing: 0.05em;">IEEE R10 · BANGALORE SECTION</p>
+</footer>
+
 <script>
-  // Scroll-reveal
-  const revealEls = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.15 });
-  revealEls.forEach(el => io.observe(el));
+  // ==========================================
+  // REFINED WEB AUDIO API - SOFT & PLEASANT SOUNDS
+  // ==========================================
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  let audioCtx;
 
-  // Live spectrogram bars, randomized loop with smoother, snappier rendering
-  const bars = 32;
-  const container = document.getElementById('spectroBars');
-  for (let i = 0; i < bars; i++) {
-    const d = document.createElement('div');
-    d.style.height = (15 + Math.random() * 80) + '%';
-    container.appendChild(d);
+  function initAudio() {
+    if (!audioCtx) audioCtx = new AudioContext();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
   }
-  setInterval(() => {
-    container.querySelectorAll('div').forEach(d => {
-      // Bias the random heights occasionally to simulate speech patterns
-      const spike = Math.random() > 0.8 ? 50 : 0;
-      d.style.height = (10 + spike + Math.random() * 40) + '%';
-    });
-  }, 250);
 
-  // Count-up stats when revealed
-  const statEls = document.querySelectorAll('.stat .n');
-  const statIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.textContent = e.target.dataset.count;
-        statIO.unobserve(e.target);
+  // Play a highly controlled, soft synthesized tone
+  function playTone(freq, type, duration, vol, attack = 0.02) {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    const release = duration - attack;
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    
+    // Smooth Envelope to prevent clicking/harshness
+    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(vol, audioCtx.currentTime + attack);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  }
+
+  // Hover Sound: Very delicate, high-pitched "tick"
+  function playHoverSound() {
+    initAudio();
+    playTone(1200, 'sine', 0.05, 0.015, 0.01); 
+  }
+
+  // Click Sound: Soft, pleasant UI "bloop" (chord)
+  function playClickSound() {
+    initAudio();
+    playTone(600, 'sine', 0.15, 0.04, 0.02);
+    setTimeout(() => playTone(800, 'sine', 0.2, 0.03, 0.02), 40); 
+  }
+
+  // Heavy Click: Satisfying deeper "thud/shimmer" for CTA
+  function playHeavyClickSound() {
+    initAudio();
+    playTone(200, 'triangle', 0.2, 0.06, 0.02); // Deep base
+    setTimeout(() => playTone(800, 'sine', 0.3, 0.05, 0.03), 20); // Mid shimmer
+    setTimeout(() => playTone(1200, 'sine', 0.4, 0.03, 0.05), 50); // High tail
+  }
+
+  // Attach audio events to UI elements
+  document.addEventListener('DOMContentLoaded', () => {
+    // Normal triggers
+    document.querySelectorAll('.sound-trigger').forEach(el => {
+      el.addEventListener('mouseenter', playHoverSound);
+      el.addEventListener('mousedown', playClickSound);
+    });
+    
+    // CTA Heavy triggers
+    document.querySelectorAll('.sound-trigger-heavy').forEach(el => {
+      el.addEventListener('mouseenter', playHoverSound);
+      el.addEventListener('mousedown', playHeavyClickSound);
+    });
+
+    // Init audio engine on first interaction anywhere
+    window.addEventListener('click', initAudio, { once: true });
+  });
+
+  // ==========================================
+  // UI & ANIMATIONS
+  // ==========================================
+  
+  // Smooth Professional Splash Screen
+  window.addEventListener('load', () => {
+    const splash = document.getElementById('splash-screen');
+    const loadTxt = document.getElementById('loading-txt');
+    
+    setTimeout(() => { loadTxt.innerText = "Connecting to Core Interface..."; }, 500);
+    
+    setTimeout(() => {
+      splash.style.opacity = '0';
+      setTimeout(() => { splash.style.visibility = 'hidden'; }, 600);
+    }, 1200); 
+  });
+
+  // Smooth Scroll Reveal Logic
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.6 });
-  statEls.forEach(el => statIO.observe(el));
-</script>
+  }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+  reveals.forEach(el => { observer.observe(el); });
 
+  // Clean Analog Oscilloscope Canvas
+  const canvas = document.getElementById('scopeCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  function resize() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  let time = 0;
+  
+  function draw() {
+    // Subtle trailing effect
+    ctx.fillStyle = 'rgba(3, 10, 20, 0.25)'; 
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const cy = canvas.height / 2;
+    const amp1 = canvas.height * 0.18; 
+    const amp2 = canvas.height * 0.09; 
+
+    // Draw Graticule
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(0, 181, 226, 0.05)';
+    ctx.lineWidth = 1;
+    for(let i = 0; i < canvas.height; i += 80) { ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); }
+    for(let i = 0; i < canvas.width; i += 80) { ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); }
+    ctx.moveTo(0, cy); ctx.lineTo(canvas.width, cy);
+    ctx.stroke();
+
+    // CH1 (Blue Wave - Analog Signal)
+    ctx.beginPath();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#00B5E2'; 
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = '#00B5E2';
+
+    for (let x = 0; x < canvas.width; x += 4) { 
+      const normX = x * 0.008;
+      // Complex waveform simulating a vocal pattern
+      const wave = Math.sin(normX + time * 2) + (Math.sin(normX * 3 + time * 1.5) * 0.4) + (Math.sin(normX * 5) * 0.2);
+      const y = cy - 70 + (wave * amp1); 
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // CH2 (Green Wave - Filtered Signal)
+    ctx.beginPath();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#8CC63F'; 
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = '#8CC63F';
+
+    for (let x = 0; x < canvas.width; x += 4) {
+      const normX = x * 0.008;
+      // Smoother processed wave
+      const filteredWave = Math.sin((normX * 0.7) + (time * 1.2)); 
+      const y = cy + 70 + (filteredWave * amp2); 
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    time += 0.035;
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
 </body>
 </html>
