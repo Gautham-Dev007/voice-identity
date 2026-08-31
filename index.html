@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voice Identity — SPS IEEE-RITB</title>
+<style>
+  :root{
+    --ink: #F2EEE6;
+    --ink-dim: #A9A49B;
+    --bg: #101012;
+    --bg-raised: #17171A;
+    --clay: #C1592F;
+    --clay-dim: #7A3B21;
+    --signal: #8FE3C6;
+    --line: #29292C;
+    --font-display: 'Archivo Black', 'Arial Black', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-data: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a { color: var(--signal); }
+
+  .wrap{
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- HERO ---------- */
+
+  .hero{
+    padding: 72px 0 48px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-eyebrow{
+    font-family: var(--font-data);
+    font-size: 13px;
+    color: var(--ink-dim);
+    letter-spacing: 0.02em;
+    margin-bottom: 28px;
+  }
+
+  .hero h1{
+    font-family: var(--font-display);
+    font-size: clamp(52px, 12vw, 96px);
+    line-height: 0.92;
+    margin: 0 0 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero h1 span{
+    display:block;
+  }
+
+  .hero-sub{
+    font-size: 18px;
+    color: var(--ink-dim);
+    max-width: 46ch;
+    margin: 0 0 36px;
+  }
+
+  .waveform{
+    width: 100%;
+    height: 84px;
+    display: block;
+    margin: 8px 0 40px;
+  }
+
+  .hero-meta{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    font-family: var(--font-data);
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+
+  .hero-meta strong{
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .cta-row{
+    margin-top: 36px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn{
+    display: inline-block;
+    padding: 14px 26px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .btn-primary{
+    background: var(--clay);
+    color: #fff;
+  }
+  .btn-primary:hover{ background: #d5643a; transform: translateY(-1px); }
+
+  .btn-ghost{
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost:hover{ border-color: var(--ink-dim); transform: translateY(-1px); }
+
+  /* ---------- SECTIONS ---------- */
+
+  section{
+    padding: 56px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-head{
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .section-head .tag{
+    font-family: var(--font-data);
+    font-size: 13px;
+    color: var(--clay);
+  }
+
+  .section-head h2{
+    font-family: var(--font-display);
+    font-size: 28px;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+
+  p{ color: var(--ink-dim); max-width: 62ch; }
+  p.lede{ color: var(--ink); font-size: 17px; }
+
+  /* overview stat strip */
+  .stat-strip{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    margin-top: 32px;
+    border: 1px solid var(--line);
+  }
+  .stat{
+    background: var(--bg);
+    padding: 20px 16px;
+  }
+  .stat .n{
+    font-family: var(--font-data);
+    font-size: 22px;
+    color: var(--signal);
+    display:block;
+    margin-bottom: 6px;
+  }
+  .stat .l{
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+
+  /* rounds */
+  .round{
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 20px;
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+  }
+  .round:first-of-type{ border-top: none; }
+
+  .round-mark{
+    font-family: var(--font-data);
+    font-size: 13px;
+    color: var(--clay-dim);
+    padding-top: 4px;
+  }
+
+  .round h3{
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 19px;
+    margin: 0 0 8px;
+  }
+
+  .round .detail-line{
+    font-family: var(--font-data);
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    margin-top: 12px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .round .detail-line span strong{
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* logistics two-col */
+  .logistics-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 8px;
+  }
+  .logistics-grid h4{
+    font-family: var(--font-data);
+    font-size: 13px;
+    color: var(--ink-dim);
+    text-transform: none;
+    margin: 0 0 12px;
+    font-weight: 400;
+  }
+  .logistics-grid ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .logistics-grid li{
+    padding: 8px 0;
+    border-top: 1px solid var(--line);
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+  .logistics-grid li:first-child{ border-top: none; }
+
+  /* prizes */
+  .prize-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+  }
+  .prize-row:first-child{ border-top: none; }
+  .prize-place{
+    font-family: var(--font-data);
+    font-size: 13px;
+    color: var(--ink-dim);
+    width: 90px;
+  }
+  .prize-name{ font-size: 16px; flex: 1; }
+  .prize-value{
+    font-family: var(--font-data);
+    color: var(--signal);
+    font-size: 14px;
+  }
+
+  /* coordinators / info */
+  .info-card{
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 14px;
+  }
+  .info-card .role{
+    font-family: var(--font-data);
+    font-size: 12px;
+    color: var(--clay);
+    margin-bottom: 6px;
+  }
+  .info-card .name{
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .info-card .phone{
+    font-family: var(--font-data);
+    font-size: 14px;
+    color: var(--ink-dim);
+  }
+  .info-card .phone a{ color: var(--ink-dim); text-decoration: none; }
+  .info-card .phone a:hover{ color: var(--signal); }
+
+  .venue-box{
+    margin-top: 24px;
+    font-family: var(--font-data);
+    font-size: 13.5px;
+    color: var(--ink-dim);
+    line-height: 1.9;
+  }
+  .venue-box strong{ color: var(--ink); font-weight: 500; }
+
+  /* footer */
+  footer{
+    padding: 40px 0 60px;
+    text-align: left;
+  }
+  footer p{
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+
+  @media (max-width: 560px){
+    .stat-strip{ grid-template-columns: repeat(2, 1fr); }
+    .logistics-grid{ grid-template-columns: 1fr; }
+    .round{ grid-template-columns: 40px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">SPS IEEE-RITB &nbsp;/&nbsp; MSRIT &nbsp;·&nbsp; SIGNAL PROCESSING SOCIETY STUDENT CHAPTER</div>
+    <h1><span>VOICE</span><span>IDENTITY</span></h1>
+    <p class="hero-sub">Can you tell a real voice from a synthetic one? An interactive DSP audio-identification challenge — record, scramble, and unmask your teammates' voices in real time.</p>
+
+    <svg class="waveform" viewBox="0 0 720 84" preserveAspectRatio="none" aria-hidden="true">
+      <polyline points="0,42 12,42 20,20 28,64 36,10 44,74 52,30 60,50 68,42 76,42 84,18 92,60 100,42 108,42 116,8 124,76 132,34 140,48 148,42 156,42 164,26 172,56 180,42 188,42 196,14 204,70 212,38 220,44 228,42 236,42 244,22 252,60 260,42 268,42 276,6 284,78 292,30 300,50 308,42 316,42 324,18 332,64 340,42 348,42 356,32 364,52 372,42 380,42 388,10 396,74 404,36 412,46 420,42 428,42 436,24 444,58 452,42 460,42 468,16 476,68 484,40 492,44 500,42 508,42 516,28 524,54 532,42 540,42 548,20 556,62 564,42 572,42 580,34 588,50 596,42 604,42 612,12 620,72 628,38 636,46 644,42 652,42 660,26 668,56 676,42 684,42 692,30 700,52 708,42 720,42"
+        fill="none" stroke="#C1592F" stroke-width="2"/>
+    </svg>
+
+    <div class="hero-meta">
+      <div>📍 <strong>[VENUE NAME], MSRIT CAMPUS</strong></div>
+      <div>🗓 <strong>[EVENT DATE], 2026</strong></div>
+      <div>⏱ <strong>2–3 HOURS</strong></div>
+      <div>👥 <strong>TEAMS OF 3–4</strong></div>
+    </div>
+
+    <div class="cta-row">
+      <a href="#" class="btn btn-primary">Register your team →</a>
+      <a href="#rounds" class="btn btn-ghost">See how it works</a>
+    </div>
+  </header>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <div class="section-head">
+      <span class="tag">01</span>
+      <h2>Overview</h2>
+    </div>
+    <p class="lede">An interactive audio challenge built around practical digital signal processing. Teams record short voice clips, which get scrambled, pitch-shifted, and format-altered live using signal-manipulation algorithms — then race to identify their own teammates' voices in a blind test.</p>
+
+    <div class="stat-strip">
+      <div class="stat"><span class="n">3–4</span><span class="l">members per team</span></div>
+      <div class="stat"><span class="n">2–3h</span><span class="l">total duration</span></div>
+      <div class="stat"><span class="n">2</span><span class="l">competitive rounds</span></div>
+      <div class="stat"><span class="n">ALL</span><span class="l">branches & years</span></div>
+    </div>
+  </section>
+
+  <!-- ROUNDS -->
+  <section id="rounds">
+    <div class="section-head">
+      <span class="tag">02</span>
+      <h2>Rounds</h2>
+    </div>
+
+    <div class="round">
+      <div class="round-mark">R1</div>
+      <div>
+        <h3>The Scramble — Elimination</h3>
+        <p>Each member records a 5-second standardized phrase. Our Python system applies pitch scaling and formant shifting, then scrambles the playback order. Teams have to match each altered voice snippet back to the correct teammate.</p>
+        <div class="detail-line">
+          <span><strong>Format:</strong> audio-based blind identification</span>
+          <span><strong>Scoring:</strong> speed + accuracy</span>
+          <span><strong>Advance:</strong> top 50%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="round">
+      <div class="round-mark">R2</div>
+      <div>
+        <h3>The Deep-fake Duel — Finals</h3>
+        <p>Finalist teams receive a mix of genuine samples, heavily filtered voices, and fully synthesized clips. Teams analyse both the audio and live on-screen spectrograms to classify each one as real or modified.</p>
+        <div class="detail-line">
+          <span><strong>Format:</strong> DSP vs. AI voice discrimination</span>
+          <span><strong>Scoring:</strong> highest cumulative score wins</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGISTICS -->
+  <section id="logistics">
+    <div class="section-head">
+      <span class="tag">03</span>
+      <h2>What's running it</h2>
+    </div>
+    <div class="logistics-grid">
+      <div>
+        <h4>Hardware on site</h4>
+        <ul>
+          <li>1 laptop running the local Python DSP script</li>
+          <li>USB condenser / lapel microphone</li>
+          <li>Sound system / PA speakers</li>
+          <li>Projector & screen for live spectrograms</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Software stack</h4>
+        <ul>
+          <li>Python 3.x</li>
+          <li>librosa</li>
+          <li>soundfile · scipy · numpy</li>
+          <li>matplotlib</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIZES -->
+  <section id="prizes">
+    <div class="section-head">
+      <span class="tag">04</span>
+      <h2>Prizes</h2>
+    </div>
+    <div class="prize-row">
+      <div class="prize-place">1ST</div>
+      <div class="prize-name">STM Boards</div>
+      <div class="prize-value">[VALUE]</div>
+    </div>
+    <div class="prize-row">
+      <div class="prize-place">2ND</div>
+      <div class="prize-name">Cash prize</div>
+      <div class="prize-value">₹1,500</div>
+    </div>
+    <div class="prize-row">
+      <div class="prize-place">3RD</div>
+      <div class="prize-name">Cash prize</div>
+      <div class="prize-value">₹1,000</div>
+    </div>
+  </section>
+
+  <!-- INFORMATION -->
+  <section id="information">
+    <div class="section-head">
+      <span class="tag">05</span>
+      <h2>Information</h2>
+    </div>
+
+    <div class="info-card">
+      <div class="role">Coordinator</div>
+      <div class="name">[Coordinator Name]</div>
+      <div class="phone"><a href="tel:+910000000000">+91 [XXXXX XXXXX]</a></div>
+    </div>
+
+    <div class="info-card">
+      <div class="role">Coordinator</div>
+      <div class="name">[Coordinator Name]</div>
+      <div class="phone"><a href="tel:+910000000000">+91 [XXXXX XXXXX]</a></div>
+    </div>
+
+    <div class="venue-box">
+      <strong>Venue:</strong> [Venue / Room, Block, MSRIT Campus]<br>
+      <strong>Date:</strong> [Event Date], 2026<br>
+      <strong>Reporting time:</strong> [Time]<br>
+      <strong>Registration deadline:</strong> [Date]
+    </div>
+
+    <div class="cta-row">
+      <a href="#" class="btn btn-primary">Fill registration form →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Organized by SPS IEEE-RITB — Signal Processing Society Student Branch Chapter, MSRIT.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
