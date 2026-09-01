@@ -5,6 +5,7 @@
    static clears just enough to point at the next. First person to decode all 6
    wins something extra; a coordinator will know how to verify it.
    Signal one lives in the console. No console on hand? Hold the mark top-left instead.
+   Hunt concept credit: Harshit Aaradhya, ETE, SPS Execom 2025.
    — IEEE SPS RIT-B
 -->
 <html lang="en">
@@ -64,7 +65,7 @@
 
   /* Easter-egg triggers use tap/hold gestures — stop mobile browsers from
      treating them as text selection or showing the long-press callout menu */
-  #egg-nav-logo, #cd-secs, #egg-title, #scopeCanvas, #egg-dot, #egg-marquee, #egg-recall {
+  #egg-nav-logo, #cd-mins, #egg-title, #scopeCanvas, #egg-dot, #egg-marquee, #egg-recall {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
@@ -142,6 +143,19 @@
 
   a { color: inherit; text-decoration: none; }
 
+  /* Visible keyboard-focus ring — dark theme hides the browser default,
+     so links/buttons need their own for anyone tabbing through the page */
+  a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+    outline: 2px solid var(--sps-green-glow);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  #back-to-top { transition: var(--transition); }
+  #back-to-top:hover { opacity: 1 !important; transform: translateY(-2px); }
+  #back-to-top svg { transition: transform 0.3s ease; }
+  #back-to-top:hover svg { transform: translateY(-2px); }
+
   /* --- TYPOGRAPHY --- */
   h1, h2, h3 { font-family: var(--font-display); }
   h1 { font-size: clamp(3.2rem, 9vw, 8rem); font-weight: 900; letter-spacing: -0.04em; line-height: 0.95; text-transform: uppercase; }
@@ -216,11 +230,19 @@
     filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
     animation: float-icon 3s ease-in-out infinite; 
   }
-  .toast-close { 
-    position: absolute; top: 16px; right: 20px; background: none; border: none; 
-    color: var(--text-secondary); font-size: 1.8rem; cursor: pointer; transition: color 0.3s; 
+  .toast-close {
+    position: absolute; top: 14px; right: 14px;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; font-size: 1.25rem; line-height: 1; cursor: pointer;
+    transition: var(--transition);
   }
-  .toast-close:hover { color: #fff; }
+  .toast-close:hover, .toast-close:focus-visible {
+    background: rgba(255, 107, 107, 0.2); border-color: rgba(255, 107, 107, 0.6);
+    color: #ff9b9b; transform: scale(1.08);
+    outline: none;
+  }
   @keyframes float-icon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
   /* --- HERO SECTION --- */
@@ -668,7 +690,7 @@
   <div class="toast-content">
     <div class="toast-icon">✨</div>
     <div>
-      <h4 style="margin-bottom: 8px; color: #fff; font-family: var(--font-display); font-size: 1.3rem; font-weight: 800;">Engineering is tough. Have fun!</h4>
+      <h4 style="margin-bottom: 8px; margin-right: 34px; color: #fff; font-family: var(--font-display); font-size: 1.3rem; font-weight: 800;">Engineering is tough. Have fun!</h4>
       <p style="font-size: 1rem; color: var(--text-secondary); line-height: 1.6;">Take a break and assemble your crew! Something strange happens to your voice at this one — and it's worth showing up for. You won't want to miss this experience.</p>
     </div>
   </div>
@@ -930,11 +952,32 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="section container" style="text-align: center; border-top: 1px solid rgba(0, 181, 226, 0.2); padding-top: 50px; margin-top: 20px; padding-bottom: 50px;">
+<footer class="section container" style="text-align: center; border-top: 1px solid rgba(0, 181, 226, 0.2); padding-top: 56px; margin-top: 20px; padding-bottom: 56px;">
+
+  <!-- Org identity -->
   <p class="mono" style="font-size: 0.9rem; color: var(--text-secondary); letter-spacing: 0.05em;">ORGANIZED BY SIGNAL PROCESSING SOCIETY MSRIT</p>
-  <p class="mono" style="font-size: 1rem; color: var(--ieee-cyan); margin-top: 12px; font-weight: 800; letter-spacing: 0.1em;">IEEE SPS · RIT-B</p>
-  <p class="mono" style="font-size: 0.75rem; color: var(--text-secondary); opacity: 0.5; margin-top: 28px; letter-spacing: 0.05em;">This page isn't as quiet as it looks<span id="egg-dot" aria-hidden="true" title=""></span>.</p>
-  <p class="mono" style="font-size: 0.75rem; color: var(--text-secondary); opacity: 0.4; margin-top: 6px; letter-spacing: 0.05em;">Some signals only machines can pick up. The rest of us just need to sit with the mark up top a little longer.</p>
+  <p class="mono" style="font-size: 1rem; color: var(--ieee-cyan); margin-top: 10px; font-weight: 800; letter-spacing: 0.1em;">IEEE SPS · RIT-B</p>
+
+  <div style="width: 48px; height: 1px; background: rgba(0, 181, 226, 0.25); margin: 32px auto;"></div>
+
+  <!-- Credits -->
+  <p class="mono" style="font-size: 0.8rem; color: var(--text-secondary); opacity: 0.75; letter-spacing: 0.04em;">Hunt concept by Harshit Aaradhya, ETE, SPS Execom '25</p>
+
+  <div style="width: 48px; height: 1px; background: rgba(0, 181, 226, 0.25); margin: 32px auto;"></div>
+
+  <!-- Playful easter-egg aside, deliberately set apart from the formal credits above -->
+  <p class="mono" style="font-size: 0.75rem; color: var(--text-secondary); opacity: 0.5; letter-spacing: 0.05em;">This page isn't as quiet as it looks<span id="egg-dot" aria-hidden="true" title=""></span>.</p>
+  <p class="mono" style="font-size: 0.75rem; color: var(--text-secondary); opacity: 0.4; margin-top: 8px; letter-spacing: 0.05em; max-width: 420px; margin-left: auto; margin-right: auto;">Some signals only machines can pick up. The rest of us just need to sit with the mark up top a little longer.</p>
+
+  <!-- Copyright + back to top -->
+  <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 40px;">
+    <span class="mono" id="footer-year" style="font-size: 0.7rem; color: var(--text-secondary); opacity: 0.5; letter-spacing: 0.04em;">&copy; 2026 IEEE SPS RIT-B</span>
+    <span style="width: 4px; height: 4px; border-radius: 50%; background: var(--text-secondary); opacity: 0.3;"></span>
+    <a href="#" id="back-to-top" class="mono" style="font-size: 0.7rem; color: var(--sps-green-glow); opacity: 0.85; letter-spacing: 0.04em; display: inline-flex; align-items: center; gap: 6px;">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      Back to top
+    </a>
+  </div>
 </footer>
 <!-- HINT RECALL BADGE -->
 <div id="egg-recall" onclick="recallHint()" role="button" aria-label="Show hint again">
@@ -947,13 +990,13 @@
     <div class="egg-emoji">🎙️</div>
     <h3>All 6 Signals Found</h3>
     <p>Good ears, good instincts, or just very patient — either way, that's exactly what we're testing for. Tap below to send your claim phrase straight to a coordinator.</p>
-    <div class="egg-phrase" id="egg-phrase">FREQUENCY-LOCKED-06</div>
+    <div class="egg-phrase" id="egg-phrase">CARRIER-LOCKED-06</div>
     <div class="egg-share-row">
-      <a class="egg-share-btn" href="https://wa.me/919108261536?text=Hi%21%20I%20found%20all%206%20hidden%20signals%20on%20the%20Voice%20Identity%20site.%20My%20claim%20phrase%3A%20FREQUENCY-LOCKED-06" target="_blank" rel="noopener">
+      <a class="egg-share-btn" href="https://wa.me/919108261536?text=Hi%21%20I%20found%20all%206%20hidden%20signals%20on%20the%20Voice%20Identity%20site.%20My%20claim%20phrase%3A%20CARRIER-LOCKED-06" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.09c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.03.27-3.46-.72-2.92-1.19-4.79-4.14-4.94-4.33-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.11 1.01-2.4.27-.29.58-.36.78-.36.19 0 .39 0 .55.01.18.01.42-.07.66.5.24.58.82 2 .89 2.15.07.15.12.32.02.51-.1.19-.15.31-.3.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.35 1.46.29.15.46.13.63-.08.17-.2.72-.84.92-1.13.19-.29.38-.24.64-.14.26.1 1.65.78 1.94.92.29.14.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
         Message Mayur
       </a>
-      <a class="egg-share-btn" href="https://wa.me/917349781259?text=Hi%21%20I%20found%20all%206%20hidden%20signals%20on%20the%20Voice%20Identity%20site.%20My%20claim%20phrase%3A%20FREQUENCY-LOCKED-06" target="_blank" rel="noopener">
+      <a class="egg-share-btn" href="https://wa.me/917349781259?text=Hi%21%20I%20found%20all%206%20hidden%20signals%20on%20the%20Voice%20Identity%20site.%20My%20claim%20phrase%3A%20CARRIER-LOCKED-06" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.09c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.03.27-3.46-.72-2.92-1.19-4.79-4.14-4.94-4.33-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.11 1.01-2.4.27-.29.58-.36.78-.36.19 0 .39 0 .55.01.18.01.42-.07.66.5.24.58.82 2 .89 2.15.07.15.12.32.02.51-.1.19-.15.31-.3.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.35 1.46.29.15.46.13.63-.08.17-.2.72-.84.92-1.13.19-.29.38-.24.64-.14.26.1 1.65.78 1.94.92.29.14.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
         Message Sukanya
       </a>
@@ -1306,27 +1349,39 @@
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
-  // --- EASTER EGGS: a linked treasure hunt, 6 steps ---
-  // Finding one reveals the hint for the next. Order matters.
+  // --- Back to top ---
+  (function() {
+    const link = document.getElementById('back-to-top');
+    if (!link) return;
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
 
-  const EGG_CHAIN = ['console', 'listen', 'title', 'canvas', 'pixel', 'hold'];
+  // --- EASTER EGGS: a linked treasure hunt, 6 steps ---
+  // Finding one reveals the hint for the next. Order matters. Every step
+  // works with just a mouse+keyboard OR just a thumb — no step requires
+  // one but not the other.
+
+  const EGG_CHAIN = ['console', 'scroll', 'canvas', 'pixel', 'hold', 'type'];
   const EGG_NAMES = {
-    console: 'The Static',
-    listen:  'The Echo',
-    title:   'The Resonance',
-    canvas:  'The Waveform',
-    pixel:   'The Noise Floor',
-    hold:    'The Sustain'
+    console: 'Carrier Wave',
+    scroll:  'Dead Air',
+    canvas:  'Interference',
+    pixel:   'Noise Floor',
+    hold:    'Phase Lock',
+    type:    'Signal Lock'
   };
   const EGG_HINTS = {
-    listen: "One word cuts through static. Speak it with your keys, anywhere on this page \u2014 or if your hands only touch glass, chase the words that keep drifting past and catch them three times.",
-    title:  "A name repeated enough times stops sounding like a name at all. Say this one till it resonates \u2014 five times should do it.",
-    canvas: "That waveform up top isn't just playing back \u2014 it's listening for something to answer it. Knock until it notices \u2014 three raps ought to get its attention.",
+    scroll: "Tape doesn't stop at the end \u2014 it loops back. Ride this page all the way down, then all the way back up, twice over, before six seconds run out.",
+    canvas: "That waveform up top isn't just playing back \u2014 it's listening for something to answer it. Give it four quick raps before it stops paying attention.",
     pixel:  "Every recording has a noise floor \u2014 the quiet you only notice once you're listening for it. This page has one too, sitting right where the story runs out of things to say.",
-    hold:   "A sustained note only means something if you don't let go too soon. Hold this one still through three long heartbeats."
+    hold:   "A tone only locks in if you don't let go too soon. Find where the minutes are still ticking, and hold them still for a slow three-count.",
+    type:   "Every transmission signs off with a callsign. Type ANALOG anywhere on this page to close it out \u2014 or if your hands only touch glass, tap the name at the very top of the page, six times, quickly."
   };
-  const EGG_STORAGE_KEY = 'voiceIdentityEggsFound';
-  const CLAIM_PHRASE = 'FREQUENCY-LOCKED-06';
+  const EGG_STORAGE_KEY = 'voiceIdentityEggsFound_v2';
+  const CLAIM_PHRASE = 'CARRIER-LOCKED-06';
 
   // Restore progress from a previous visit, if any (falls back to empty on any error,
   // e.g. private browsing mode blocking storage)
@@ -1344,7 +1399,7 @@
 
   console.log('%c🎙️ VOICE IDENTITY', 'font-size: 24px; font-weight: 900; color: #8CC63F; text-shadow: 0 0 10px rgba(140,198,63,0.6);');
   console.log("%cCurious enough to open this? That's exactly the instinct we're testing for.", 'font-size: 13px; color: #00B5E2;');
-  console.log('%cThis is signal one of six, chained together. Run revealSignal() to lock it in and clear the static on the next.', 'font-size: 12px; color: #a3b7cc;');
+  console.log('%cThis is signal one of six, chained together. Run catchSignal() to lock it in and clear the static on the next.', 'font-size: 12px; color: #a3b7cc;');
 
   function showEggToast(name, hint) {
     // Remove any toast already showing so they never stack on top of each other
@@ -1424,8 +1479,9 @@
     overlay.setAttribute('aria-hidden', 'true');
   };
 
-  // Step 1: Console command (desktop) OR long-press the nav logo 3s (mobile-friendly alt)
-  window.revealSignal = function() {
+  // Step 1 — Carrier Wave: console command (desktop) OR long-press the nav
+  // logo mark for 2.5s (mobile-friendly alt). Same idea, two doorways in.
+  window.catchSignal = function() {
     foundEgg('console');
     return 'Signal acquired. Nice work.';
   };
@@ -1435,7 +1491,7 @@
     let holdTimer = null;
     const start = (e) => {
       if (e.cancelable) e.preventDefault(); // stop native long-press selection/callout
-      holdTimer = setTimeout(() => foundEgg('console'), 3000);
+      holdTimer = setTimeout(() => foundEgg('console'), 2500);
     };
     const cancel = () => clearTimeout(holdTimer);
     logo.addEventListener('mousedown', start);
@@ -1443,72 +1499,92 @@
     ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev => logo.addEventListener(ev, cancel));
   })();
 
-  // Step 2: Type the word LISTEN anywhere (desktop) OR triple-tap the scrolling ticker (mobile-friendly alt)
+  // Step 2 — Dead Air: scroll to the very bottom, then all the way back to
+  // the very top, twice in a row, within 6 seconds. Pure scroll gesture —
+  // identical on a trackpad, a mouse wheel, or a thumb swipe.
   (function() {
-    const target = 'listen';
-    let buffer = '';
-    window.addEventListener('keydown', (e) => {
-      if (e.key.length !== 1) return;
-      buffer = (buffer + e.key.toLowerCase()).slice(-target.length);
-      if (buffer === target) foundEgg('listen');
-    });
-  })();
-  (function() {
-    const ticker = document.getElementById('egg-marquee');
-    if (!ticker) return;
-    let taps = 0, tapTimer = null;
-    ticker.addEventListener('click', () => {
-      taps++;
-      clearTimeout(tapTimer);
-      tapTimer = setTimeout(() => { taps = 0; }, 2000);
-      if (taps >= 3) { taps = 0; clearTimeout(tapTimer); foundEgg('listen'); }
-    });
-  })();
-
-  // Step 3: Tap/click the hero title 5x within 3 seconds (works on mobile too)
-  (function() {
-    const title = document.getElementById('egg-title');
-    let taps = 0, tapTimer = null;
-    title.addEventListener('click', () => {
-      taps++;
-      clearTimeout(tapTimer);
-      tapTimer = setTimeout(() => { taps = 0; }, 3000);
-      if (taps >= 5) { taps = 0; clearTimeout(tapTimer); foundEgg('title'); }
-    });
+    const TOP_ZONE = 40;       // px from top counted as "at the top"
+    const BOTTOM_ZONE = 40;    // px from bottom counted as "at the bottom"
+    const WINDOW_MS = 6000;    // whole loop must land inside this window
+    let stage = 0;             // 0=waiting for bottom, 1=waiting for top, 2=waiting for bottom again, 3=waiting for top again
+    let windowTimer = null;
+    const atTop = () => window.scrollY <= TOP_ZONE;
+    const atBottom = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - BOTTOM_ZONE;
+    const resetLoop = () => { stage = 0; clearTimeout(windowTimer); };
+    window.addEventListener('scroll', () => {
+      if (foundEggs.has('scroll')) return;
+      if (stage === 0 && atBottom()) {
+        stage = 1;
+        clearTimeout(windowTimer);
+        windowTimer = setTimeout(resetLoop, WINDOW_MS);
+      } else if (stage === 1 && atTop()) {
+        stage = 2;
+      } else if (stage === 2 && atBottom()) {
+        stage = 3;
+      } else if (stage === 3 && atTop()) {
+        clearTimeout(windowTimer);
+        foundEgg('scroll');
+      }
+    }, { passive: true });
   })();
 
-  // Step 4: Triple-click/tap the oscilloscope waveform
+  // Step 3 — Interference: tap/click the oscilloscope waveform 4x within 2.5s.
+  // click fires for both mouse and touch, so no separate mobile path is needed.
   (function() {
     const scope = document.getElementById('scopeCanvas');
     if (!scope) return;
-    let clicks = 0, clickTimer = null;
+    let taps = 0, tapTimer = null;
     scope.addEventListener('click', () => {
-      clicks++;
-      clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => { clicks = 0; }, 2000);
-      if (clicks >= 3) { clicks = 0; clearTimeout(clickTimer); foundEgg('canvas'); }
+      taps++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => { taps = 0; }, 2500);
+      if (taps >= 4) { taps = 0; clearTimeout(tapTimer); foundEgg('canvas'); }
     });
   })();
 
-  // Step 5: Hidden pixel-dot near the footer
+  // Step 4 — Noise Floor: the hidden low-opacity mark near the footer.
   (function() {
     const dot = document.getElementById('egg-dot');
     if (dot) dot.addEventListener('click', () => foundEgg('pixel'));
   })();
 
-  // Step 6: Long-press (hold 3s) the countdown "seconds" unit
+  // Step 5 — Phase Lock: long-press (2.5s) the countdown's ticking "Minutes"
+  // unit — the one number on the page that's always visibly still moving.
   (function() {
-    const secs = document.getElementById('cd-secs');
-    if (!secs) return;
+    const mins = document.getElementById('cd-mins');
+    if (!mins) return;
     let holdTimer = null;
     const start = (e) => {
       if (e.cancelable) e.preventDefault(); // stop native long-press selection/callout
-      holdTimer = setTimeout(() => foundEgg('hold'), 3000);
+      holdTimer = setTimeout(() => foundEgg('hold'), 2500);
     };
     const cancel = () => clearTimeout(holdTimer);
-    secs.addEventListener('mousedown', start);
-    secs.addEventListener('touchstart', start, { passive: false });
-    ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev => secs.addEventListener(ev, cancel));
+    mins.addEventListener('mousedown', start);
+    mins.addEventListener('touchstart', start, { passive: false });
+    ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev => mins.addEventListener(ev, cancel));
+  })();
+
+  // Step 6 — Signal Lock (final): type ANALOG anywhere (desktop) OR
+  // tap the hero title 6x within 3s (mobile-friendly alt).
+  (function() {
+    const target = 'analog';
+    let buffer = '';
+    window.addEventListener('keydown', (e) => {
+      if (e.key.length !== 1) return;
+      buffer = (buffer + e.key.toLowerCase()).slice(-target.length);
+      if (buffer === target) foundEgg('type');
+    });
+  })();
+  (function() {
+    const title = document.getElementById('egg-title');
+    if (!title) return;
+    let taps = 0, tapTimer = null;
+    title.addEventListener('click', () => {
+      taps++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => { taps = 0; }, 3000);
+      if (taps >= 6) { taps = 0; clearTimeout(tapTimer); foundEgg('type'); }
+    });
   })();
 </script>
 </body>
