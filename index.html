@@ -496,7 +496,7 @@
 
   /* --- PAST EVENTS PHOTO STRIP --- */
   .photo-strip {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 44px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;
   }
   .photo-card { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 3; }
   .photo-card img {
@@ -1087,38 +1087,32 @@
   </div>
 </section>
 
-<!-- PAST EVENTS -->
-<section class="section container" style="padding-top: 0;">
-  <div style="max-width: 700px;">
-    <h2 class="reveal">A few things we've actually built</h2>
-    <p class="reveal delay-1" style="color: var(--text-secondary); font-size: 1.1rem; margin-top: 12px;">Not every SPS event is about audio. Here's what the rest of the year looks like.</p>
-  </div>
-
-  <div class="photo-strip">
-    <div class="photo-card reveal">
-      <img src="images/nucleo-signal-quest.jpg" alt="Students working with STM32 Nucleo boards and laptops during Nucleo Signal Quest">
-      <div class="photo-card-caption">
-        <h4>Nucleo Signal Quest workshop</h4>
-        <p>STMicroelectronics sponsored the Nucleo boards — hands-on embedded signal processing on hardware they gave us, not slides.</p>
-      </div>
-    </div>
-    <div class="photo-card reveal delay-1">
-      <img src="images/edhitha-x-sps.jpg" alt="Students at a drone-building workshop hosted with EDHITHA, viewing UAV prototypes">
-      <div class="photo-card-caption">
-        <h4>Drone-building workshop with EDHITHA</h4>
-        <p>EDHITHA is RIT-B's own UAV-building club — SPS supported them in hosting this one. Signal processing shows up in flight control too, not just audio.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- FIRST-YEAR / SPS INTEREST -->
 <section class="section container" style="padding-top: 0;">
   <div class="bento-grid">
     <div class="bento-box box-full sps-card reveal" style="flex-direction: column; align-items: flex-start; gap: 32px; border-color: rgba(0, 181, 226, 0.35);">
       <div style="width: 100%;">
         <h3 style="font-size: clamp(1.6rem, 5vw, 2.4rem); margin: 16px 0 12px; line-height: 1.25;">New to engineering? Join IEEE SPS RIT-B.</h3>
-        <p style="color: var(--text-secondary); max-width: 620px; font-size: 1.1rem; line-height: 1.7;">No prior experience needed — just show up to Voice Identity. IEEE SPS RIT-B is the team behind it, and here's how joining actually works:</p>
+        <p style="color: var(--text-secondary); max-width: 620px; font-size: 1.1rem; line-height: 1.7;">No prior experience needed — just show up to Voice Identity. IEEE SPS RIT-B is the team behind it. Some of our past events include:</p>
+
+        <div class="photo-strip">
+          <div class="photo-card reveal">
+            <img src="images/nucleo-signal-quest.jpg" alt="Students working with STM32 Nucleo boards and laptops during Nucleo Signal Quest">
+            <div class="photo-card-caption">
+              <h4>Nucleo Signal Quest workshop</h4>
+              <p>STMicroelectronics sponsored the Nucleo boards — hands-on embedded signal processing on hardware they gave us, not slides.</p>
+            </div>
+          </div>
+          <div class="photo-card reveal delay-1">
+            <img src="images/edhitha-x-sps.jpg" alt="Students at a drone-building workshop hosted with EDHITHA, viewing UAV prototypes">
+            <div class="photo-card-caption">
+              <h4>Drone-building workshop with EDHITHA</h4>
+              <p>EDHITHA is RIT-B's own UAV-building club — SPS supported them in hosting this one. Signal processing shows up in flight control too, not just audio.</p>
+            </div>
+          </div>
+        </div>
+
+        <p style="color: var(--text-secondary); max-width: 620px; font-size: 1.1rem; line-height: 1.7; margin-top: 28px;">If that's the kind of thing you'd want a hand in, here's how joining actually works:</p>
 
         <div class="sps-perks">
           <span>Host events like this one</span>
