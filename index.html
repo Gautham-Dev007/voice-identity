@@ -177,7 +177,29 @@
     display: flex; justify-content: space-between; align-items: center; gap: 12px;
     box-shadow: 0 4px 30px rgba(0,0,0,0.5);
   }
-  
+
+  /* --- HERO ANNOUNCEMENT BADGE --- */
+  #announce-badge {
+    display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    justify-content: center; text-align: left;
+    background: rgba(2, 16, 36, 0.92);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--sps-green); border-radius: 30px;
+    padding: 10px 18px; margin-bottom: 8px;
+    font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-primary);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 16px rgba(140,198,63,0.12);
+  }
+  #announce-badge a { color: var(--sps-green-glow); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  #announce-badge-close {
+    background: none; border: none; color: var(--text-secondary); font-size: 1.1rem;
+    cursor: pointer; line-height: 1; padding: 2px 4px; margin-left: 4px;
+  }
+  #announce-badge-close:hover { color: #fff; }
+  body.banner-dismissed #announce-badge { display: none; }
+  @media (max-width: 600px) {
+    #announce-badge { font-size: 0.76rem; padding: 10px 14px; text-align: center; justify-content: center; }
+  }
+
   .nav-logo {
     display: flex; align-items: center; justify-content: center; gap: 12px;
     cursor: pointer; transition: var(--transition);
@@ -757,6 +779,7 @@
   .delay-3 { transition-delay: 0.45s; }
 </style>
 </head>
+
 <body>
 
 <!-- BACKGROUNDS -->
@@ -810,6 +833,11 @@
   </div>
 
   <div class="hero-content">
+    <div id="announce-badge" class="reveal active">
+      🎙️ All 6 hidden signals found — the prize is claimed, but the hunt's still there if you want to try it. Registration's filling up though — <a href="https://tally.so/r/Y5AaeB" target="_blank" rel="noopener">grab your spot →</a>
+      <button id="announce-badge-close" aria-label="Dismiss announcement">×</button>
+    </div>
+    <br>
     <div class="reveal active" style="color: var(--ieee-cyan); margin-bottom: 24px; font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; background: rgba(0, 181, 226, 0.15); padding: 10px 24px; border-radius: 30px; border: 1px solid rgba(0, 181, 226, 0.4); display: inline-block; box-shadow: 0 0 25px rgba(0,181,226,0.3);">
       Something's about to sound wrong
     </div>
@@ -1193,18 +1221,8 @@
   <div class="egg-card">
     <div class="egg-emoji">🎙️</div>
     <h3>All 6 Signals Found</h3>
-    <p>Good ears, good instincts, or just very patient — either way, that's exactly what we're testing for. Tap below to send your claim phrase straight to a coordinator.</p>
+    <p>Good ears, good instincts, or just very patient — either way, that's exactly what we're testing for. Someone already claimed the actual prize on this one, but you solved it anyway, and that's worth something on its own.</p>
     <div class="egg-phrase" id="egg-phrase"></div>
-    <div class="egg-share-row">
-      <a class="egg-share-btn" id="egg-share-1" href="#" target="_blank" rel="noopener">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.09c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.03.27-3.46-.72-2.92-1.19-4.79-4.14-4.94-4.33-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.11 1.01-2.4.27-.29.58-.36.78-.36.19 0 .39 0 .55.01.18.01.42-.07.66.5.24.58.82 2 .89 2.15.07.15.12.32.02.51-.1.19-.15.31-.3.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.35 1.46.29.15.46.13.63-.08.17-.2.72-.84.92-1.13.19-.29.38-.24.64-.14.26.1 1.65.78 1.94.92.29.14.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
-        Message Mayur
-      </a>
-      <a class="egg-share-btn" id="egg-share-2" href="#" target="_blank" rel="noopener">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.09c-.24.68-1.4 1.3-1.93 1.36-.5.06-1.03.27-3.46-.72-2.92-1.19-4.79-4.14-4.94-4.33-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.11 1.01-2.4.27-.29.58-.36.78-.36.19 0 .39 0 .55.01.18.01.42-.07.66.5.24.58.82 2 .89 2.15.07.15.12.32.02.51-.1.19-.15.31-.3.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.35 1.46.29.15.46.13.63-.08.17-.2.72-.84.92-1.13.19-.29.38-.24.64-.14.26.1 1.65.78 1.94.92.29.14.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
-        Message Sukanya
-      </a>
-    </div>
     <button onclick="closeEgg()">Nice.</button>
   </div>
 </div>
@@ -1563,6 +1581,20 @@
     });
   })();
 
+  // --- Announcement banner dismiss (remembered per browser) ---
+  (function() {
+    const KEY = 'voiceIdentityBannerDismissed_v1';
+    const closeBtn = document.getElementById('announce-badge-close');
+    if (!closeBtn) return;
+    try {
+      if (localStorage.getItem(KEY) === '1') document.body.classList.add('banner-dismissed');
+    } catch (e) {}
+    closeBtn.addEventListener('click', () => {
+      document.body.classList.add('banner-dismissed');
+      try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    });
+  })();
+
   // --- EASTER EGGS: a linked treasure hunt, 6 steps ---
   // Finding one reveals the hint for the next. Order matters. Every step
   // works with just a mouse+keyboard OR just a thumb — no step requires
@@ -1648,11 +1680,6 @@
     const phrase = _dec(CLAIM_PHRASE_ENC);
     const overlay = document.getElementById('egg-overlay');
     document.getElementById('egg-phrase').textContent = phrase;
-    const msg = `Hi! I found all 6 hidden signals on the Voice Identity site. My claim phrase: ${phrase}`;
-    const link1 = document.getElementById('egg-share-1');
-    const link2 = document.getElementById('egg-share-2');
-    if (link1) link1.href = `https://wa.me/919108261536?text=${encodeURIComponent(msg)}`;
-    if (link2) link2.href = `https://wa.me/917349781259?text=${encodeURIComponent(msg)}`;
     overlay.classList.add('show');
     overlay.setAttribute('aria-hidden', 'false');
   }
