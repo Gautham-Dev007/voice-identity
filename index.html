@@ -730,7 +730,7 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .engineering-grid, .radar-sweep, .radar-sweep-reverse, .eq-bar,
-    .live-dot, .btn-primary, .toast-icon { animation: none !important; }
+    .live-dot, .btn-primary, .toast-icon, .countdown-value { animation: none !important; }
     .reveal { transition-duration: 0.2s !important; }
   }
 
@@ -752,6 +752,23 @@
     font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3rem); font-weight: 900;
     color: var(--sps-green-glow); text-shadow: 0 0 20px rgba(140, 198, 63, 0.5); line-height: 1;
     font-variant-numeric: tabular-nums;
+  }
+  .countdown-value.glitching {
+    text-shadow: -4px 0 #ff3c5a, 4px 0 #00b5e2, 0 0 30px rgba(255,60,90,0.6);
+    animation: countdownGlitchShake 0.65s steps(2);
+  }
+  @keyframes countdownGlitchShake {
+    0% { transform: translate(0,0) skew(0deg); filter: none; }
+    10% { transform: translate(-6px, 4px) skew(-4deg); filter: invert(0.2) saturate(3); }
+    20% { transform: translate(6px, -4px) skew(3deg); filter: hue-rotate(90deg) brightness(1.6); }
+    30% { transform: translate(-5px, -3px) skew(-2deg); filter: invert(0.3); }
+    40% { transform: translate(5px, 3px) skew(4deg); filter: hue-rotate(-60deg) saturate(2); }
+    50% { transform: translate(-4px, 2px) skew(-3deg); filter: brightness(0.4); }
+    60% { transform: translate(4px, -2px) skew(2deg); filter: invert(0.15) hue-rotate(45deg); }
+    70% { transform: translate(-3px, 3px) skew(-2deg); filter: saturate(2.5); }
+    80% { transform: translate(3px, -3px) skew(1deg); filter: brightness(1.4); }
+    90% { transform: translate(-1px, 1px) skew(0deg); filter: none; }
+    100% { transform: translate(0,0) skew(0deg); filter: none; }
   }
   .countdown-label {
     font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary);
@@ -905,6 +922,7 @@
       <div class="countdown-unit"><div class="countdown-value" id="cd-secs">--</div><div class="countdown-label">Seconds</div></div>
     </div>
     <p class="reveal delay-2" style="margin: 24px auto 0; max-width: 500px;">Registrations lock at 2:20 PM IST on 22 September 2026 — same day, same time the event kicks off at LHC Seminar Hall, MSRIT. Get your team of 3–4 in before the window shuts.</p>
+    <p class="reveal delay-2" style="margin: 14px auto 0; max-width: 500px; color: #ffb84d; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700;">⚠️ Spots may close earlier than shown above if registrations fill up faster than expected.</p>
   </div>
 
   <div id="countdown-closed-msg" style="display: none;">
@@ -1413,13 +1431,14 @@
   let time = 0;
   let rafId = null;
   let isVisible = true;
+  let isOnScreen = true;
 
   // Pause the render loop when the tab/page isn't visible to save battery/CPU
   document.addEventListener('visibilitychange', () => {
     isVisible = !document.hidden;
-    if (isVisible && !prefersReducedMotion) {
+    if (isVisible && isOnScreen && !prefersReducedMotion && !rafId) {
       rafId = requestAnimationFrame(draw);
-    } else if (rafId) {
+    } else if ((!isVisible) && rafId) {
       cancelAnimationFrame(rafId);
       rafId = null;
     }
@@ -1452,7 +1471,7 @@
     ctx.beginPath();
     ctx.lineWidth = 3.5;
     ctx.strokeStyle = '#00B5E2'; 
-    ctx.shadowBlur = 15;
+    ctx.shadowBlur = 8;
     ctx.shadowColor = '#00B5E2';
 
     for (let x = 0; x < width; x += 4) { 
@@ -1469,7 +1488,7 @@
     ctx.beginPath();
     ctx.lineWidth = 4.5;
     ctx.strokeStyle = '#a4e54c'; 
-    ctx.shadowBlur = 20;
+    ctx.shadowBlur = 10;
     ctx.shadowColor = '#a4e54c';
 
     for (let x = 0; x < width; x += 4) {
@@ -1487,22 +1506,34 @@
     ctx.beginPath();
     ctx.strokeStyle = 'rgba(0, 181, 226, 0.9)';
     ctx.lineWidth = 3;
-    ctx.shadowBlur = 25;
+    ctx.shadowBlur = 12;
     ctx.shadowColor = '#00B5E2';
     ctx.moveTo(scanX, 0);
     ctx.lineTo(scanX, height);
     ctx.stroke();
+    ctx.shadowBlur = 0; // reset — leaving this set would make the next frame's fillRect pay the blur cost too
 
-    // Scanner trail gradient
-    const gradient = ctx.createLinearGradient(scanX - 50, 0, scanX, 0);
-    gradient.addColorStop(0, 'rgba(0, 181, 226, 0)');
-    gradient.addColorStop(1, 'rgba(0, 181, 226, 0.15)');
-    ctx.fillStyle = gradient;
+    // Scanner trail — a flat translucent fill reads almost identically to a
+    // gradient here but skips allocating a new gradient object every frame
+    ctx.fillStyle = 'rgba(0, 181, 226, 0.08)';
     ctx.fillRect(scanX - 50, 0, 50, height);
 
     time += 0.035;
-    if (isVisible && !prefersReducedMotion) rafId = requestAnimationFrame(draw);
+    if (isVisible && isOnScreen && !prefersReducedMotion) rafId = requestAnimationFrame(draw);
   }
+
+  // Pause the render loop entirely while the canvas is scrolled off-screen —
+  // this page has grown a lot since the loop was written, so most scroll
+  // time is now spent well past the hero while this was still computing
+  // and painting every frame for nothing.
+  const scopeObserver = new IntersectionObserver((entries) => {
+    const wasOnScreen = isOnScreen;
+    isOnScreen = entries[0].isIntersecting;
+    if (isOnScreen && !wasOnScreen && isVisible && !prefersReducedMotion && !rafId) {
+      rafId = requestAnimationFrame(draw);
+    }
+  }, { threshold: 0 });
+  scopeObserver.observe(canvas);
 
   if (!prefersReducedMotion) {
     rafId = requestAnimationFrame(draw);
@@ -1517,6 +1548,8 @@
   const REG_DEADLINE = new Date("2026-09-22T14:20:00+05:30").getTime(); // 22 Sept 2026, 2:20 PM IST
   let registrationClosed = false;
 
+  let isGlitching = false;
+
   function updateCountdown() {
     const distance = REG_DEADLINE - Date.now();
 
@@ -1524,6 +1557,7 @@
       closeRegistration();
       return;
     }
+    if (isGlitching) return; // don't stomp on the fake glitch values mid-flash
 
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -1576,6 +1610,36 @@
 
   updateCountdown();
   setInterval(updateCountdown, 1000);
+
+  // Periodically flash the countdown down toward "almost out of time" before
+  // snapping back to the real value — a visual nudge that the deadline shown
+  // isn't a guarantee if registrations fill up faster than expected.
+  (function() {
+    const prefersReducedMotionCountdown = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotionCountdown) return;
+
+    function glitchCountdown() {
+      if (registrationClosed || isGlitching) return;
+      const els = ['cd-days', 'cd-hours', 'cd-mins', 'cd-secs'].map((id) => document.getElementById(id));
+      if (els.some((el) => !el)) return;
+
+      isGlitching = true;
+      els.forEach((el) => el.classList.add('glitching'));
+      const nearZero = () => String(Math.floor(Math.random() * 4)).padStart(2, '0'); // 00–03, different each time
+      els[0].textContent = nearZero();
+      els[1].textContent = nearZero();
+      els[2].textContent = nearZero();
+      els[3].textContent = nearZero();
+
+      setTimeout(() => {
+        els.forEach((el) => el.classList.remove('glitching'));
+        isGlitching = false;
+        updateCountdown();
+      }, 650);
+    }
+
+    setInterval(glitchCountdown, 6000);
+  })();
 
   // --- Back to top ---
   (function() {
@@ -1760,7 +1824,9 @@
     const atTop = () => window.scrollY <= TOP_ZONE;
     const atBottom = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - BOTTOM_ZONE;
     const resetLoop = () => { stage = 0; clearTimeout(windowTimer); };
-    window.addEventListener('scroll', () => {
+    let scrollLoopTicking = false;
+    function checkScrollLoop() {
+      scrollLoopTicking = false;
       if (foundEggs.has('scroll')) return;
       if (stage === 0 && atBottom()) {
         stage = 1;
@@ -1774,6 +1840,11 @@
         clearTimeout(windowTimer);
         foundEgg('scroll');
       }
+    }
+    window.addEventListener('scroll', () => {
+      if (foundEggs.has('scroll') || scrollLoopTicking) return;
+      scrollLoopTicking = true;
+      requestAnimationFrame(checkScrollLoop);
     }, { passive: true });
   })();
 
