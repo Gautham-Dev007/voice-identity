@@ -642,7 +642,7 @@
     border-left: 8px solid var(--ieee-blue); transition: var(--transition); cursor: pointer;
   }
   .prize-row:hover { transform: scale(1.02) translateX(6px); background: rgba(0,0,0,0.6); border-left-color: var(--ieee-cyan); box-shadow: 0 15px 30px rgba(0,0,0,0.5);}
-  .prize-row .place { display: flex; align-items: center; gap: 10px; }
+  .prize-row .place { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .prize-row .medal { font-size: 1.4rem; line-height: 1; }
   .prize-row h4 { font-size: 1rem; margin-bottom: 0; }
   .prize-row .val { font-size: 1.8rem; font-weight: 900; font-family: var(--font-display); line-height: 1.15; }
@@ -651,6 +651,21 @@
   .prize-1st:hover { border-left-color: var(--sps-green-glow); }
   .prize-1st h4, .prize-1st .val { color: var(--sps-green-glow); text-shadow: 0 0 15px rgba(140, 198, 63, 0.5); }
   .prize-1st .caption { color: #fff; opacity: 0.95; font-weight: 600; }
+  .prize-old-val {
+    text-decoration: line-through; opacity: 0.45; font-size: 0.5em; font-weight: 700;
+    color: var(--text-secondary); margin-right: 10px; text-shadow: none; vertical-align: middle;
+  }
+  .prize-bump-badge {
+    display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono);
+    font-size: 0.65rem; font-weight: 800; letter-spacing: 0.04em; color: #02060d;
+    background: var(--sps-green-glow); padding: 3px 9px; border-radius: 20px;
+    margin-left: 8px; vertical-align: middle; box-shadow: 0 0 12px rgba(164, 229, 76, 0.6);
+    animation: prizeBumpPulse 2s ease-in-out infinite;
+  }
+  @keyframes prizeBumpPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
 
   /* --- MOBILE OPTIMIZATION --- */
   @media (max-width: 992px) {
@@ -730,7 +745,7 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .engineering-grid, .radar-sweep, .radar-sweep-reverse, .eq-bar,
-    .live-dot, .btn-primary, .toast-icon, .countdown-value { animation: none !important; }
+    .live-dot, .btn-primary, .toast-icon, .countdown-value, .prize-bump-badge { animation: none !important; }
     .reveal { transition-duration: 0.2s !important; }
   }
 
@@ -1093,9 +1108,10 @@
           <div class="place">
             <span class="medal">🥇</span>
             <h4 class="mono">1ST PLACE</h4>
+            <span class="prize-bump-badge">▲ JUST INCREASED</span>
           </div>
-          <div class="val">STM Nucleo Boards</div>
-          <div class="caption">₹3,500 in value — one board for every member of the winning team</div>
+          <div class="val"><span class="prize-old-val">₹3,500</span>₹8,000</div>
+          <div class="caption">STM Nucleo Boards*, now worth ₹2,000 each — one for every member of the winning team (up to 4).</div>
         </div>
         <div class="prize-row sound-trigger">
           <div class="place">
@@ -1122,6 +1138,7 @@
           <div class="caption">There's a hunt hidden somewhere on this page. First person to fully decode it gets a special prize — a coordinator will know it when they see it.</div>
         </div>
       </div>
+      <p style="font-size: 0.75rem; color: var(--text-secondary); opacity: 0.6; margin-top: 18px;">*Terms &amp; conditions apply.</p>
     </div>
     
     <!-- CTA Banner -->
